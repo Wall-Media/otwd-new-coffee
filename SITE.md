@@ -303,6 +303,28 @@ not relative paths (`./category/websites.html`, `./<slug>.html`). With `trailing
 `/blog/index.html` is served at `/blog` (no trailing slash), so `./` relative links resolve 
 against `/` (parent of last segment), not `/blog/`, causing 404s.
 
+**Notes listing spacing.** All Notes listing pages (blog index, category, and tag pages) follow
+the same tighter spacing standard to avoid large empty cream voids between sections. The
+standing CSS values are:
+
+- `.hero` padding: `clamp(56px,9vw,90px) clamp(20px,5vw,40px) clamp(24px,4vw,40px)` (top, 
+  horizontal, bottom). Bottom padding is intentionally short (24–40px) to keep category chips 
+  close to the first post card.
+- `.posts` padding: `clamp(24px,4vw,40px) 0 clamp(80px,11vw,120px)` (top, horizontal, bottom). 
+  Top padding is capped at 24–40px to prevent a tall unused void on short listings.
+- `.post-card`: `display:flex; gap:clamp(18px,2.8vw,24px); padding:clamp(20px,3vw,26px)`. Flex 
+  layout supports the thumbnail pattern (thumb left, text right; mobile column stack). Gap and 
+  padding are modest to keep cards dense but readable.
+- `.post-card__thumb`: `flex:none; width:160px; height:120px` on desktop, `width:100%; 
+  height:200px` on mobile (under 640px).
+- `.post-card__content`: `flex:1; min-width:0` ensures text content fills remaining space and 
+  truncates gracefully.
+
+These values apply identically on `blog/index.html`, `blog/category/*.html`, and 
+`blog/tag/*.html`. When adding a new listing page or adjusting layout, prefer denser, calm 
+spacing over generous clamps. The page should feel grounded, not floaty. Preserve the flex 
+thumbnail layout and 24px margin between cards.
+
 ---
 
 ## Known weaknesses, for us rather than the agent
