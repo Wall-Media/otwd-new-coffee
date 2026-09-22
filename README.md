@@ -14,6 +14,9 @@ Open any of the files in a browser and it works.
 | `coffee.html` | The booking page. Every coffee call to action links here. Holds the LeadConnector calendar, which sizes itself, so it needs a full page rather than a modal to grow into. |
 | `thanks.html` | Post-booking thank you page. Set this as the calendar's redirect URL in GoHighLevel. Marked `noindex`. |
 | `privacy.html` | Combined privacy notice and terms of use, tabbed, deep linkable at `#privacy` and `#terms`. |
+| `blog/` | Notes section. Static HTML blog with categories and tags. See Blog structure below. |
+| `rss.xml` | RSS feed for published notes. |
+| `sitemap.xml` | Site sitemap. |
 
 ## Opening it
 
@@ -106,6 +109,39 @@ The seven images (`hero-open`, `hero-shut`, the four case study screenshots and 
 portrait) are still served from `pub.hyperagent.com`. They work, but they are an external
 dependency the site should not have. Download them into an `assets/` folder and repoint
 the `src` attributes before this goes anywhere permanent.
+
+## Blog structure
+
+The Notes section (`/blog/`) is a static HTML blog. No build step, no CMS, no Markdown pipeline.
+
+**Adding a note:**
+
+1. Create `blog/<slug>.html` following the pattern in `why-your-website-should-feel-like-you.html`
+2. Set unique title, meta description, canonical URL
+3. For drafts: use `<meta name="robots" content="noindex,nofollow">` and show the Draft label
+4. For published: use `<meta name="robots" content="index,follow">` and remove the Draft label
+5. Include JSON-LD BlogPosting structured data with author (Petro Wall), publisher (Wall Media Ltd), datePublished, dateModified, keywords (from tags), and articleSection (from category)
+6. Assign one category and 2-4 tags
+7. Add the note card to `blog/index.html`
+8. Add the note card to the relevant category page (`blog/category/<slug>.html`)
+9. Add the note card to each tag page (`blog/tag/<slug>.html`)
+10. If published, add to `rss.xml`. Exclude drafts from RSS
+11. If published, add to `sitemap.xml`. Omit drafts from sitemap
+
+**Adding a category:**
+
+1. Create `blog/category/<slug>.html` following the existing pattern
+2. Add the category chip to `blog/index.html`
+3. Add the category page to `sitemap.xml`
+
+**Adding a tag:**
+
+1. Create `blog/tag/<slug>.html` following the existing pattern
+2. Add the tag page to `sitemap.xml`
+
+**Draft vs published:**
+
+Draft posts carry `noindex,nofollow` and show a Draft label. They may appear in blog listings but are excluded from RSS and sitemap. Published posts carry `index,follow`, have no Draft label, and appear everywhere.
 
 ## Still outstanding
 

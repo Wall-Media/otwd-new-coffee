@@ -70,10 +70,14 @@ The safety rules below do not relax because there is no preview. The stop list s
 | File | Serves | Notes |
 |---|---|---|
 | index.html | / | The whole marketing site, 92,918 bytes, about 1,723 lines. Readable, not minified. |
-| blog/index.html | /blog/ | Notes listing page. Lists all notes/posts with title, date and blurb. |
-| blog/*.html | /blog/post-slug | Individual note pages. Match the structure of blog/why-your-website-should-feel-like-you.html. |
 | privacy.html | /privacy | Privacy and terms, tabbed. |
 | thanks.html | /thanks | Post-booking landing page. Carries `noindex,nofollow` deliberately, set as the calendar's redirect URL in GoHighLevel. Do not remove the robots tag. |
+| blog/index.html | /blog/ | Notes listing page with category filter chips and rich post cards. |
+| blog/why-your-website-should-feel-like-you.html | /blog/why-your-website-should-feel-like-you | Draft post (noindex). First note on brand voice and websites. |
+| blog/category/websites.html | /blog/category/websites | Category listing for Websites notes. |
+| blog/tag/*.html | /blog/tag/* | Tag listing pages (websites, brand-voice, small-business). |
+| rss.xml | /rss.xml | RSS feed for published notes. Excludes drafts. |
+| sitemap.xml | /sitemap.xml | Site sitemap including blog pages. Draft posts omitted. |
 | README.md | — | Petro's conventions and copy rules. Read it alongside this file. |
 
 Images are **not in the repo**. Seven images are hosted externally on pub.hyperagent.com: the
@@ -251,14 +255,17 @@ block, its own header and footer, and the email assembly script if it shows an e
 privacy.html's simpler structure rather than index.html's. Vercel serves a new .html file at
 its clean URL with no config change. Update the nav in whichever files carry links.
 
-**Add a note (blog post).** Create a new HTML file in the `blog/` folder, matching the
-structure of `blog/why-your-website-should-feel-like-you.html`: simple topbar, `:root` tokens,
-hero with post metadata (including draft label if needed), article content, legal footer. Add
-a new `<a class="post">` entry to `blog/index.html` with title, date, draft label (if
-appropriate) and blurb. Links from notes to the main site use `../` (notes to coffee is
-`../coffee.html`). The draft label is `<span class="draft">Draft</span>`. All notes use the
-cream design system, Fraunces + Karla, and the same copy rules: UK English, warm, direct,
-first person, no urgency, no dashes. Every note page must carry the full legal footer.
+**Add a note (blog post).** Create a new HTML file in `blog/` following the pattern in
+`why-your-website-should-feel-like-you.html`. Set unique title, meta description, canonical,
+keywords. Use `noindex,nofollow` for drafts, `index,follow` for published. Include JSON-LD
+BlogPosting with datePublished, dateModified, author (Petro Wall), publisher (Wall Media Ltd),
+keywords from tags, and articleSection from category. Add the note to `blog/index.html`,
+relevant category page, and tag pages. Update `rss.xml` if published (exclude drafts). Do not
+include draft posts in sitemap.xml.
+
+**Add a category or tag.** Create `blog/category/<slug>.html` or `blog/tag/<slug>.html`
+following the existing pattern. Add the category chip to `blog/index.html`. Add new category
+or tag pages to sitemap.xml. Update category/tag lists on existing posts as needed.
 
 ---
 
