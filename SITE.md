@@ -256,17 +256,30 @@ privacy.html's simpler structure rather than index.html's. Vercel serves a new .
 its clean URL with no config change. Update the nav in whichever files carry links.
 
 **Add a note (blog post).** Create a new HTML file in `blog/` following the pattern in
-`why-your-website-should-feel-like-you.html`. Set unique title, meta description, canonical,
+`your-website-should-feel-like-meeting-you.html`. Set unique title, meta description, canonical,
 keywords. Use `noindex,nofollow` for drafts, `index,follow` for published. Include JSON-LD
 BlogPosting with datePublished, dateModified, author (Petro Wall), publisher (Wall Media Ltd),
-keywords from tags, and articleSection from category. Add the note to `blog/index.html`,
-relevant category page, and tag pages. Update `rss.xml` if published (exclude drafts). Do not
-include draft posts in sitemap.xml.
+keywords from tags, articleSection from category, and image URL (string, not ImageObject) when
+a hero image is included. Add og:image and twitter:image meta tags (with full 
+https://www.offthewalldigital.com URL) when a hero image is present, and set twitter:card to
+summary_large_image. Add the note to `blog/index.html`, relevant category page, and tag pages.
+Update `rss.xml` if published (exclude drafts). Do not include draft posts in sitemap.xml.
 
+**Post hero images (optional).** When a note includes a hero image: (1) the title block
+(category, date, read time, h1, tags, byline) appears first inside `.wrap.hero`, (2) the hero
+image follows in a separate `.wrap` container with class `.post-hero-img`, positioned after
+the hero div closes but before the article, (3) image styling via `.post-hero-img`: max-width
+640px to match article column, max-height 480px with object-fit cover, border-radius 16px,
+subtle shadow (0 8px 24px -12px rgba(47,51,39,.18)), margin-top clamp(32px,5vw,48px). The
+image lives inside the content wrap, not full viewport width. Store hero images in
+`assets/blog/` as PNG or JPG. Use relative path `../assets/blog/<slug>.png` in the img src.
+Use full absolute URL `https://www.offthewalldigital.com/assets/blog/<slug>.png` in og:image,
+twitter:image, and JSON-LD image. Loading attribute should be "eager" for hero images. Include
+descriptive alt text.
 
 **Author card on every note.** Every post carries the same author call-out after the
 coffee CTA and before Related notes. Copy it from
-`blog/why-your-website-should-feel-like-you.html` (the `aside.author-card` block). Photo
+`blog/your-website-should-feel-like-meeting-you.html` (the `aside.author-card` block). Photo
 lives at `assets/blog/petro.jpg`. Do not rewrite the bio per post. If the card copy or
 photo changes, update the template post and every existing note in one go.
 
