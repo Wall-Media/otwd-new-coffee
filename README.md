@@ -139,6 +139,8 @@ The Notes section (`/blog/`) is a static HTML blog. No build step, no CMS, no Ma
 1. Create `blog/tag/<slug>.html` following the existing pattern
 2. Add the tag page to `sitemap.xml`
 
+**Author card:** every note ends with the same Petro call-out (`aside.author-card`), photo at `assets/blog/petro.jpg`. Copy it from an existing post. Do not rewrite per note.
+
 **Draft vs published:**
 
 Draft posts carry `noindex,nofollow` and show a Draft label. They may appear in blog listings but are excluded from RSS and sitemap. Published posts carry `index,follow`, have no Draft label, and appear everywhere.
