@@ -1,0 +1,10 @@
+{
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/blog/why-your-website-should-feel-like-you",
+      "destination": "/blog/your-website-should-feel-like-meeting-you",
+      "permanent": true
+    }
+  ]
+}
