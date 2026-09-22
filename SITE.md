@@ -72,7 +72,7 @@ The safety rules below do not relax because there is no preview. The stop list s
 | index.html | / | The whole marketing site, 92,918 bytes, about 1,723 lines. Readable, not minified. |
 | privacy.html | /privacy | Privacy and terms, tabbed. |
 | thanks.html | /thanks | Post-booking landing page. Carries `noindex,nofollow` deliberately, set as the calendar's redirect URL in GoHighLevel. Do not remove the robots tag. |
-| blog/index.html | /blog/ | Notes listing page with category filter chips and rich post cards. |
+| blog/index.html | /blog | Notes listing page with category filter chips and rich post cards. Canonical URL is /blog (no trailing slash). |
 | blog/why-your-website-should-feel-like-you.html | /blog/why-your-website-should-feel-like-you | Draft post (noindex). First note on brand voice and websites. |
 | blog/category/websites.html | /blog/category/websites | Category listing for Websites notes. |
 | blog/tag/*.html | /blog/tag/* | Tag listing pages (websites, brand-voice, small-business). |
@@ -286,6 +286,11 @@ photo changes, update the template post and every existing note in one go.
 **Add a category or tag.** Create `blog/category/<slug>.html` or `blog/tag/<slug>.html`
 following the existing pattern. Add the category chip to `blog/index.html`. Add new category
 or tag pages to sitemap.xml. Update category/tag lists on existing posts as needed.
+
+**Links within Notes.** Use root-absolute paths (`/blog/category/websites`, `/blog/<slug>`) 
+not relative paths (`./category/websites.html`, `./<slug>.html`). With `trailingSlash: false`, 
+`/blog/index.html` is served at `/blog` (no trailing slash), so `./` relative links resolve 
+against `/` (parent of last segment), not `/blog/`, causing 404s.
 
 ---
 
