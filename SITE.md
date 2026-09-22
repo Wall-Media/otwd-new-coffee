@@ -72,6 +72,12 @@ The safety rules below do not relax because there is no preview. The stop list s
 | index.html | / | The whole marketing site, 92,918 bytes, about 1,723 lines. Readable, not minified. |
 | privacy.html | /privacy | Privacy and terms, tabbed. |
 | thanks.html | /thanks | Post-booking landing page. Carries `noindex,nofollow` deliberately, set as the calendar's redirect URL in GoHighLevel. Do not remove the robots tag. |
+| blog/index.html | /blog/ | Notes listing page with category filter chips and rich post cards. |
+| blog/why-your-website-should-feel-like-you.html | /blog/why-your-website-should-feel-like-you | Draft post (noindex). First note on brand voice and websites. |
+| blog/category/websites.html | /blog/category/websites | Category listing for Websites notes. |
+| blog/tag/*.html | /blog/tag/* | Tag listing pages (websites, brand-voice, small-business). |
+| rss.xml | /rss.xml | RSS feed for published notes. Excludes drafts. |
+| sitemap.xml | /sitemap.xml | Site sitemap including blog pages. Draft posts omitted. |
 | README.md | — | Petro's conventions and copy rules. Read it alongside this file. |
 
 Images are **not in the repo**. Seven images are hosted externally on pub.hyperagent.com: the
@@ -248,6 +254,18 @@ attribute alone.
 block, its own header and footer, and the email assembly script if it shows an email. Match
 privacy.html's simpler structure rather than index.html's. Vercel serves a new .html file at
 its clean URL with no config change. Update the nav in whichever files carry links.
+
+**Add a note (blog post).** Create a new HTML file in `blog/` following the pattern in
+`why-your-website-should-feel-like-you.html`. Set unique title, meta description, canonical,
+keywords. Use `noindex,nofollow` for drafts, `index,follow` for published. Include JSON-LD
+BlogPosting with datePublished, dateModified, author (Petro Wall), publisher (Wall Media Ltd),
+keywords from tags, and articleSection from category. Add the note to `blog/index.html`,
+relevant category page, and tag pages. Update `rss.xml` if published (exclude drafts). Do not
+include draft posts in sitemap.xml.
+
+**Add a category or tag.** Create `blog/category/<slug>.html` or `blog/tag/<slug>.html`
+following the existing pattern. Add the category chip to `blog/index.html`. Add new category
+or tag pages to sitemap.xml. Update category/tag lists on existing posts as needed.
 
 ---
 
