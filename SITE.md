@@ -265,6 +265,16 @@ https://www.offthewalldigital.com URL) when a hero image is present, and set twi
 summary_large_image. Add the note to `blog/index.html`, relevant category page, and tag pages.
 Update `rss.xml` if published (exclude drafts). Do not include draft posts in sitemap.xml.
 
+**Listing card thumbnails (required for every note).** Every note card on listing pages 
+(blog index, category pages, tag pages) displays a thumbnail of the post's featured image. The 
+card uses a horizontal flexbox layout: image on the left (160px × 120px, rounded, with subtle 
+shadow) and text content on the right. On mobile (below 640px) the layout stacks with image 
+above text (full width, 200px height). Image src uses root-absolute paths like 
+`/assets/blog/<slug>.png`. The thumbnail img element appears as the first child inside the 
+`.post-card` link, followed by a `.post-card__content` wrapper containing the existing top, 
+heading, excerpt, and tags structure. The whole card remains one clickable link. See 
+`blog/index.html` for the complete pattern.
+
 **Post hero images (optional).** When a note includes a hero image: (1) the title block
 (category, date, read time, h1, tags, byline) appears first inside `.wrap.hero`, (2) the hero
 image follows in a separate `.wrap` container with class `.post-hero-img`, positioned after
