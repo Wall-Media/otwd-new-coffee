@@ -33,7 +33,7 @@ python3 -m http.server 8000
 ## Deployment
 
 All files sit at the repo root, so any static host works. On GitHub Pages, serve from
-`main` / root and `index.html` is picked up automatically. Vercel needs no config either.
+`main` / root and `index.html` is picked up automatically. Vercel uses `vercel.json` with `cleanUrls: true` so paths without `.html` resolve.
 
 Booking happens in a popup, so there is no separate booking page. The coffee links carry
 the calendar URL as their `href`, which only comes into play when scripts are off or

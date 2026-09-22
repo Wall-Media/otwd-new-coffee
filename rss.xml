@@ -3,16 +3,8 @@
   <channel>
     <title>Off The Wall Digital · Notes</title>
     <link>https://www.offthewalldigital.com/blog/</link>
-    <description>Practical thoughts on websites, systems and small business from Petro Wall in Ramsgate.</description>
+    <description>Notes from Petro Wall. How you show up online, how the work gets done, and the small shifts that make room for a life again.</description>
     <language>en-GB</language>
     <atom:link href="https://www.offthewalldigital.com/rss.xml" rel="self" type="application/rss+xml"/>
-    <item>
-      <title>Why your website should feel like meeting you</title>
-      <link>https://www.offthewalldigital.com/blog/why-your-website-should-feel-like-you</link>
-      <guid>https://www.offthewalldigital.com/blog/why-your-website-should-feel-like-you</guid>
-      <pubDate>Sun, 22 Sep 2026 00:00:00 +0000</pubDate>
-      <description>Most websites read like a form. They are not warm, not memorable, and they give nobody a reason to ring you. I think your website should feel like meeting you, not the tidy version you put in the brochure.</description>
-      <category>Websites</category>
-    </item>
   </channel>
 </rss>
