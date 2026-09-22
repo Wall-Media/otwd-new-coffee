@@ -9,6 +9,8 @@ Open any of the files in a browser and it works.
 | File | What it is |
 | --- | --- |
 | `index.html` | The whole marketing site: hero, outcomes, "Is this you", front of house / back of house, four case studies, the week graphic, About, and the contact section. |
+| `blog/index.html` | Notes listing page. Short thoughts on running a small business without drowning in your own admin. |
+| `blog/*.html` | Individual note pages. Each one is a standalone HTML file with its own header, footer, and the full legal footer. |
 | `coffee.html` | The booking page. Every coffee call to action links here. Holds the LeadConnector calendar, which sizes itself, so it needs a full page rather than a modal to grow into. |
 | `thanks.html` | Post-booking thank you page. Set this as the calendar's redirect URL in GoHighLevel. Marked `noindex`. |
 | `privacy.html` | Combined privacy notice and terms of use, tabbed, deep linkable at `#privacy` and `#terms`. |

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why your website should feel like meeting you · Off The Wall Digital</title>
+<meta name="description" content="Most websites read like a form. Here is why yours should not.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..800,0..100,0..1&family=Karla:wght@400..700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2036%2036%27%3E%3Ccircle%20cx%3D%2718%27%20cy%3D%274%27%20r%3D%271.4%27%20fill%3D%27%232a2e21%27%2F%3E%3Cline%20x1%3D%2718%27%20y1%3D%275.2%27%20x2%3D%2710%27%20y2%3D%2712%27%20stroke%3D%27%232a2e21%27%20stroke-width%3D%271.5%27%2F%3E%3Cline%20x1%3D%2718%27%20y1%3D%275.2%27%20x2%3D%2726%27%20y2%3D%2712%27%20stroke%3D%27%232a2e21%27%20stroke-width%3D%271.5%27%2F%3E%3Cg%20transform%3D%27rotate%28-9%2018%2021%29%27%3E%3Crect%20x%3D%277%27%20y%3D%2711%27%20width%3D%2722%27%20height%3D%2720%27%20rx%3D%272%27%20fill%3D%27%23ffffff%27%20stroke%3D%27%232a2e21%27%20stroke-width%3D%272.2%27%2F%3E%3Crect%20x%3D%2710.5%27%20y%3D%2714.5%27%20width%3D%2715%27%20height%3D%2713%27%20fill%3D%27%232ea89a%27%2F%3E%3Ccircle%20cx%3D%2723.5%27%20cy%3D%2725.5%27%20r%3D%271.6%27%20fill%3D%27%23e8547a%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<style>:root{
+  --cream:#fdf8ec;--bone:#f6efdf;--ink:#2f3327;--head:#2a2e21;--muted:#6d7360;
+  --green:#6f7d45;--teal:#2ea89a;--teal-dark:#237a70;--gold:#e3b23c;--coral:#e8547a;
+  --shadow-m:0 18px 40px -22px rgba(47,51,39,.34);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--cream);color:var(--ink);
+  font-family:Karla,system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--teal-dark);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:3px solid var(--teal);outline-offset:3px;border-radius:6px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;color:var(--head);font-variation-settings:"SOFT" 40,"WONK" 1;letter-spacing:-.02em;line-height:1.08;margin:0;text-wrap:balance}
+.wrap{max-width:680px;margin:0 auto;padding:0 clamp(20px,5vw,40px)}
+.topbar{border-bottom:1px solid rgba(47,51,39,.1);background:rgba(253,248,236,.9);position:sticky;top:0;z-index:10;backdrop-filter:blur(12px)}
+.topbar__in{display:flex;align-items:center;gap:12px;height:70px;max-width:960px;margin:0 auto;padding:0 clamp(20px,5vw,40px)}
+.brand{display:flex;align-items:center;gap:11px;color:var(--head);text-decoration:none}
+.brand__name{font-family:Fraunces,serif;font-weight:700;font-size:1rem;letter-spacing:-.02em}
+.back{margin-left:auto;font-weight:700;font-size:.9rem;text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+.hero{padding:clamp(44px,7vw,72px) 0 clamp(32px,5vw,48px);border-bottom:1px solid rgba(47,51,39,.08)}
+.post-meta{display:flex;gap:12px;align-items:center;font-size:.82rem;color:var(--muted)}
+.draft{
+  display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  background:rgba(111,125,69,.1);border:1px solid rgba(111,125,69,.3);color:var(--green);
+  padding:4px 10px;border-radius:999px;
+}
+.hero h1{font-size:clamp(2.2rem,5.4vw,3.2rem);margin:18px 0 0;font-weight:600;font-variation-settings:"SOFT" 60,"WONK" 1}
+article{padding:clamp(40px,6vw,64px) 0 clamp(50px,7vw,80px)}
+article p{margin:0 0 20px;font-size:1.05rem;line-height:1.72;max-width:58ch}
+article p:last-child{margin-bottom:0}
+.cta{
+  margin-top:48px;padding-top:32px;border-top:1px solid rgba(47,51,39,.08);
+}
+.cta p{color:var(--muted);font-size:.98rem;margin-bottom:18px}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;font-family:Karla,sans-serif;font-weight:700;font-size:.92rem;
+  padding:12px 22px;border-radius:999px;border:1.5px solid transparent;text-decoration:none;
+  transition:transform .35s var(--spring),box-shadow .35s var(--spring);white-space:nowrap;
+}
+.btn--primary{background:linear-gradient(120deg,var(--green),var(--teal));color:var(--cream)}
+.btn--primary:hover{text-decoration:none;transform:translateY(-3px) scale(1.02);box-shadow:0 18px 34px -16px rgba(46,168,154,.85)}
+.foot{border-top:1px solid rgba(47,51,39,.12);padding:28px 0 40px;font-size:.84rem;color:var(--muted)}
+.foot__in{max-width:960px;margin:0 auto;padding:0 clamp(20px,5vw,40px);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:flex-start}
+.foot a{font-weight:600;color:var(--teal-dark)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar__in">
+    <span class="brand"><svg width="34" height="34" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="4" r="1.4" fill="#2a2e21"/><line x1="18" y1="5.2" x2="10" y2="12" stroke="#2a2e21" stroke-width="1.5"/><line x1="18" y1="5.2" x2="26" y2="12" stroke="#2a2e21" stroke-width="1.5"/><g transform="rotate(-9 18 21)"><rect x="7" y="11" width="22" height="20" rx="2" fill="#ffffff" stroke="#2a2e21" stroke-width="2.2"/><rect x="10.5" y="14.5" width="15" height="13" fill="#2ea89a"/><circle cx="23.5" cy="25.5" r="1.6" fill="#e8547a"/></g></svg><span class="brand__name">Off The Wall Digital</span></span>
+    <a class="back" href="./"><svg width="15" height="11" viewBox="0 0 16 12" fill="none" aria-hidden="true"><path d="M15 6H2M6.5 1.5 2 6l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Notes</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div class="post-meta">
+      <span class="draft">Draft</span>
+      <time datetime="2026-09-22">22 September 2026</time>
+    </div>
+    <h1>Why your website should feel like meeting you</h1>
+  </div>
+
+  <article class="wrap">
+    <p>Most websites read like a form. Three bullet points, a stock photo and a button that says "Learn more".</p>
+
+    <p>They are not warm. They are not memorable. And they give nobody a reason to ring you instead of the three other people who showed up in the same search.</p>
+
+    <p>I think your website should feel like meeting you. Not the tidy version you put in the brochure. The actual version. The one who knows what your clients are wrestling with before they have even named it, because you have heard the same thing a hundred times.</p>
+
+    <p>It is harder to write than three bullet points and a stock photo. It means deciding what you actually think, and then saying it plainly enough that someone reading it at half past ten at night, one eye on the telly, still knows you are talking to them.</p>
+
+    <p>But here is what happens when you do. Someone lands on your site and gets the feeling they have been looking for. Not "this company does the thing". The feeling of "yes, them". And that is worth all of it.</p>
+
+    <div class="cta">
+      <p>If your website does not sound like you yet, or if you are still running on a template somebody else wrote, I can help.</p>
+      <a class="btn btn--primary" href="../coffee.html">
+        <svg class="btn__ico" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.2 7.4h10.6v4.4a4.2 4.2 0 0 1-4.2 4.2H7.4a4.2 4.2 0 0 1-4.2-4.2V7.4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M13.8 8.8h1.7a2.3 2.3 0 0 1 0 4.6h-1.7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M6.6 5c.5-.8.4-1.6 0-2.4M9.6 5c.5-.8.4-1.6 0-2.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".7"/></svg>
+        Fancy a coffee?
+      </a>
+    </div>
+  </article>
+</main>
+
+<footer class="foot">
+  <div class="foot__in">
+    <span style="max-width:62ch">&copy; <span class="yr">2026</span> Off The Wall Digital, a trading name of Wall Media Ltd. Registered in England and Wales, company number 15045668. Registered office: Longfrey Cottage, Dorking Road, Chilworth, Surrey, GU4 8RH.</span>
+    <span><a href="../coffee.html">Fancy a coffee?</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var ys=document.querySelectorAll('.yr');
+  for(var i=0;i<ys.length;i++){ys[i].textContent=new Date().getFullYear();}
+})();
+</script>
+</body>
+</html>
