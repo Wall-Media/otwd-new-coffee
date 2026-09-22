@@ -263,6 +263,13 @@ keywords from tags, and articleSection from category. Add the note to `blog/inde
 relevant category page, and tag pages. Update `rss.xml` if published (exclude drafts). Do not
 include draft posts in sitemap.xml.
 
+
+**Author card on every note.** Every post carries the same author call-out after the
+coffee CTA and before Related notes. Copy it from
+`blog/why-your-website-should-feel-like-you.html` (the `aside.author-card` block). Photo
+lives at `assets/blog/petro.jpg`. Do not rewrite the bio per post. If the card copy or
+photo changes, update the template post and every existing note in one go.
+
 **Add a category or tag.** Create `blog/category/<slug>.html` or `blog/tag/<slug>.html`
 following the existing pattern. Add the category chip to `blog/index.html`. Add new category
 or tag pages to sitemap.xml. Update category/tag lists on existing posts as needed.
