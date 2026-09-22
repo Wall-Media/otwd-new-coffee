@@ -30,7 +30,7 @@ Pushing to `main` deploys straight to production. **On this site that is the agr
 working**, decided by Colin on 4 September 2026. Commit to main, let it go live, then show
 Petro. Do not open branches and pull requests for ordinary changes here.
 
-There is no vercel.json and none is needed.
+`vercel.json` sets `cleanUrls: true` and `trailingSlash: false` so canonical paths like `/blog/why-your-website-should-feel-like-you` and `/coffee` resolve without the `.html` suffix. Keep that file. Do not remove it to "simplify" the deploy.
 
 ### Why this site works differently from a client site
 
@@ -80,10 +80,10 @@ The safety rules below do not relax because there is no preview. The stop list s
 | sitemap.xml | /sitemap.xml | Site sitemap including blog pages. Draft posts omitted. |
 | README.md | — | Petro's conventions and copy rules. Read it alongside this file. |
 
-Images are **not in the repo**. Seven images are hosted externally on pub.hyperagent.com: the
-hero before and after, four case study screenshots, and Petro's portrait. If that host moves,
-every image breaks. Moving them into an `assets/` folder is outstanding work, already flagged
-in the README.
+Most marketing images are still hosted externally on pub.hyperagent.com (hero before and after,
+four case study screenshots). Petro's Notes author portrait is in-repo at
+`assets/blog/petro.jpg`. Moving the remaining Hyperagent images into `assets/` is still
+outstanding work, already flagged in the README.
 
 ---
 
