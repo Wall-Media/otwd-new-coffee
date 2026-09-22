@@ -288,6 +288,13 @@ the img src. Use full absolute URL
 JSON-LD image. Loading attribute should be "eager" for hero images. Include descriptive alt
 text.
 
+**Post column width (760px).** Every post follows a shared 760px max-width column for title,
+hero image, article, coffee CTA (`.cta-block`), author card, and related notes (`.related`).
+The `.cta-block` and `.related` divs must include `max-width:760px` in their inline styles,
+with `margin:clamp(...) auto 0` for horizontal centring, matching the pattern used for 
+`article` and `.author-card`. On wide viewports all content blocks sit in the same vertical
+column.
+
 **Author card on every note.** Every post carries the same author call-out after the
 coffee CTA and before Related notes. Copy it from
 `blog/your-website-should-feel-like-meeting-you.html` (the `aside.author-card` block). Photo
