@@ -381,10 +381,9 @@ Recorded so they get fixed rather than rediscovered.
   the way `ENQUIRY_WEBHOOK` is in index.html, which would turn five occurrences into one.
 - No logo or icon files. The favicon is an inline SVG data URI in every page, and there is no
   Apple touch icon.
-- privacy.html section 07 says "Ask us using the email button below", but that page has no
-  email button, only the "Send a message" footer link. This is copy on the legal page, so it
-  needs Petro's wording.
 
 Fixed on 29 September 2026: the external images now live in the repo, the email assembly
 exists in one file only, robots.txt and a branded 404.html exist, every page has a social share
-image, and canonical URLs match the clean URLs Vercel actually serves.
+image, and canonical URLs match the clean URLs Vercel actually serves. privacy.html section 07 now
+points rights requests at the enquiry form instead of an email button that no longer exists
+(option chosen by Colin).
