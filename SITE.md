@@ -360,8 +360,11 @@ rules live once, in `assets/css/notes-list.css`. The standing CSS values are:
 - `.hero` padding: `clamp(56px,9vw,90px) clamp(20px,5vw,40px) clamp(24px,4vw,40px)` (top, 
   horizontal, bottom). Bottom padding is intentionally short (24–40px) to keep category chips 
   close to the first post card.
-- `.posts` padding: `clamp(24px,4vw,40px) 0 clamp(80px,11vw,120px)` (top, horizontal, bottom). 
-  Top padding is capped at 24–40px to prevent a tall unused void on short listings.
+- `.posts` padding-top `clamp(24px,4vw,40px)` and padding-bottom `clamp(80px,11vw,120px)`.
+  Top padding is capped at 24–40px to prevent a tall unused void on short listings. Set top
+  and bottom only, never the `padding` shorthand: the element is `wrap posts`, and the
+  shorthand wipes out `.wrap`'s side gutter, which put cards flush against the screen edge on
+  phones and tablets until 29 September 2026.
 - `.post-card`: `display:flex; gap:clamp(18px,2.8vw,24px); padding:clamp(20px,3vw,26px)`. Flex 
   layout supports the thumbnail pattern (thumb left, text right; mobile column stack). Gap and 
   padding are modest to keep cards dense but readable.
