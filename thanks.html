@@ -33,19 +33,6 @@ main{position:relative;overflow:clip;padding:clamp(40px,6vw,72px) 0 clamp(50px,7
 h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:600;margin-top:20px;font-variation-settings:"SOFT" 60,"WONK" 1;max-width:22ch}
 .lede{font-size:clamp(1.02rem,1.3vw,1.15rem);color:var(--muted);max-width:56ch;margin:20px 0 0}
 
-.calwrap{
-  margin-top:36px;background:#fff;border:2px solid rgba(47,51,39,.78);
-  border-radius:26px;box-shadow:var(--shadow-l);overflow:hidden;
-}
-.calwrap__sill{height:15px;background:linear-gradient(180deg,rgba(47,51,39,.9),rgba(47,51,39,.72))}
-.cal{
-  display:block;width:100%;min-height:720px;border:0;background:#fff;
-  position:static!important;left:auto!important;top:auto!important;
-  opacity:1!important;visibility:visible!important;pointer-events:auto!important;
-  overflow:hidden!important;
-}
-@media (max-width:620px){.cal{min-height:840px}}
-
 .steps{list-style:none;margin:38px 0 0;padding:0;display:grid;gap:16px}
 .steps li{
   background:#fff;border:1px solid rgba(47,51,39,.12);border-radius:20px;
@@ -64,12 +51,11 @@ h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:600;margin-top:20px;font-varia
 .altcard{background:var(--bone);border:1px solid rgba(47,51,39,.12);border-radius:20px;padding:26px 24px}
 .altcard h3{font-size:1.1rem;font-weight:600;font-variation-settings:"SOFT" 50,"WONK" 1}
 .altcard p{font-size:.92rem;color:var(--muted);margin:9px 0 16px}
-.noscript-note{font-size:.84rem;color:var(--coral-dark);margin-top:10px}
 
 footer{border-top:1px solid rgba(47,51,39,.12);padding:30px 0 60px;margin-top:20px}
 .foot__links{display:flex;gap:12px;align-items:center;font-size:.84rem}
-.foot__links a,.mailbtn{color:var(--teal-dark);text-decoration:none;background:none;border:0;font-family:Karla,sans-serif;font-size:.84rem;cursor:pointer;padding:0}
-.foot__links a:hover,.mailbtn:hover{text-decoration:underline}
+.foot__links a{color:var(--teal-dark);text-decoration:none;background:none;border:0;font-family:Karla,sans-serif;font-size:.84rem;cursor:pointer;padding:0}
+.foot__links a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
