@@ -203,11 +203,15 @@ it is legally required to say, pass it on, and never partially do it.
 action is a plain link to the booking page, `/coffee` (five in index.html: desktop nav, mobile
 nav, hero, "Is this you", case studies, plus two in the first note). Do not point a coffee CTA straight at the external calendar.
 
-**The booking widget ID.** The GoHighLevel calendar ID `dqB0NblntdSZnLlpSFEz` appears **five
-times, all in coffee.html**: the iframe's `data-src`, the `<noscript>` fallback link, the
-`getElementById` call, the nine-second fallback redirect, and critically **as part of the
-iframe's element ID**: `dqB0NblntdSZnLlpSFEz_1788453583961`. A find-and-replace on the URL
-will miss the element ID and break the widget.
+**The booking widget ID.** The GoHighLevel calendar ID `dqB0NblntdSZnLlpSFEz` appears **twice,
+both in coffee.html**: the `CAL_ID` constant at the top of the booking section of the script,
+and the `<noscript>` fallback link, which has to repeat it because it works without JavaScript.
+To change calendar, change both. Everything else is built from `CAL_ID` at runtime: the iframe's
+`src`, the nine-second fallback redirect, and the iframe's element ID,
+`CAL_ID + '_1788453583961'`. That element ID matters: `form_embed.js` tracks the iframe by it
+to resize it, so the script sets it before setting `src`. In the markup the iframe is
+`id="calFrame"` only so the script can find it. Do not rename `calFrame` without updating the
+script, and do not give the iframe a `src` or `data-src` in the markup.
 
 **The `.cal` iframe CSS overrides** in coffee.html. A stack of `!important` rules (position,
 left, top, opacity, visibility, pointer-events, overflow) exists specifically to counteract
@@ -215,8 +219,8 @@ what GoHighLevel's `form_embed.js` does to the iframe after it measures height. 
 rewrite them and the calendar loads invisibly, which looks like nothing is wrong. The README
 says the same thing.
 
-**The `form_embed.js` URL** (`https://link.msgsndr.com/js/form_embed.js`), loaded by the
-script at the bottom of coffee.html.
+**The `form_embed.js` URL**, the `EMBED_SRC` constant next to `CAL_ID` in coffee.html's
+script.
 
 **The enquiry webhook.** `ENQUIRY_WEBHOOK` near the top of index.html's script block, pointing
 at a GoHighLevel hook. Setting it to an empty string is the documented way to fall back to a
@@ -389,8 +393,6 @@ Recorded so they get fixed rather than rediscovered.
 - Headers, footers and head tags are still copied into every page, because there is no
   build step to include them. Changing the footer or nav still means editing every page.
 - Two versions of the Google Fonts link (with and without italics) are still in use.
-- The booking widget ID should be a single constant at the top of coffee.html's script block
-  the way `ENQUIRY_WEBHOOK` is in index.html, which would turn five occurrences into one.
 - **No logo yet.** One will be designed as an SVG later. Until then the "crooked frame" mark
   stands in, and it is not a finished logo. It lives in two places on every one of the 11 pages:
   the inline `<svg>` inside the header's `.brand` link (search `rotate(-9 18 21)`), and the
@@ -404,4 +406,6 @@ image, and canonical URLs match the clean URLs Vercel actually serves. privacy.h
 points rights requests at the enquiry form instead of an email button that no longer exists
 (option chosen by Colin). Shared CSS moved into `assets/css/` with a computed style check on
 every element of every page at four widths showing no visual change, and the unused Hyperagent
-`.ha-img-placeholder` style blocks were removed from index.html and privacy.html.
+`.ha-img-placeholder` style blocks were removed from index.html and privacy.html. Internal
+links point at clean URLs. The booking calendar ID is a single `CAL_ID` constant (plus the
+`<noscript>` link) instead of five scattered copies.

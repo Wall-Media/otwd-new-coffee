@@ -47,7 +47,8 @@ of ours after booking rather than on a LeadConnector confirmation screen.
 **Booking calendar.** LeadConnector widget `dqB0NblntdSZnLlpSFEz` ("Coffee with Petro",
 30 min), resized by `https://link.msgsndr.com/js/form_embed.js`.
 
-The widget is embedded in `coffee.html`. With JavaScript off, a `<noscript>` link opens
+The widget is embedded in `coffee.html`. The calendar ID is the `CAL_ID` constant in that
+page's script, repeated only in the `<noscript>` link; change both to switch calendar. With JavaScript off, a `<noscript>` link opens
 the calendar directly instead.
 
 `form_embed.js` parks the iframe off screen to measure its content height and does not

@@ -221,8 +221,8 @@ footer{border-top:1px solid rgba(47,51,39,.12);padding:30px 0 60px;margin-top:20
         <h2 class="calhead">Pick whatever time suits you.</h2>
         <div class="calbox">
           <p class="calloading" id="calLoading">Loading the calendar...</p>
-          <iframe class="cal" id="dqB0NblntdSZnLlpSFEz_1788453583961" hidden
-                  data-src="https://api.leadconnectorhq.com/widget/booking/dqB0NblntdSZnLlpSFEz"
+          <!-- id and src are set by the script from CAL_ID -->
+          <iframe class="cal" id="calFrame" hidden
                   title="Pick a time with Petro" allow="payment" scrolling="no"></iframe>
         </div>
         <noscript><p class="noscript-note">Scripts are switched off, so the calendar will not load. <a href="https://api.leadconnectorhq.com/widget/booking/dqB0NblntdSZnLlpSFEz">Open it in a new tab</a> instead.</p></noscript>
@@ -270,24 +270,36 @@ footer{border-top:1px solid rgba(47,51,39,.12);padding:30px 0 60px;margin-top:20
 
   /* ---------------- booking calendar ----------------
      Lives on its own page rather than in a modal, so it can grow as tall as it
-     likes when someone picks a date. No viewport cap, so no scrollbar. */
-  var frame = document.getElementById('dqB0NblntdSZnLlpSFEz_1788453583961');
+     likes when someone picks a date. No viewport cap, so no scrollbar.
+
+     CAL_ID : the GoHighLevel calendar ("Coffee with Petro", 30 min). The only copy
+              in the script: the iframe's id, its src and the fallback redirect are
+              all built from it. The <noscript> link in the markup repeats it, because
+              it has to work without JavaScript. Change both together.
+     EMBED_SRC : GoHighLevel's form_embed.js, which sizes the iframe. */
+  var CAL_ID = 'dqB0NblntdSZnLlpSFEz';
+  var CAL_URL = 'https://api.leadconnectorhq.com/widget/booking/' + CAL_ID;
+  var EMBED_SRC = 'https://link.msgsndr.com/js/form_embed.js';
+
+  var frame = document.getElementById('calFrame');
   var loading = document.getElementById('calLoading');
   if (frame){
+    /* form_embed.js tracks the iframe by this id, so set it before the src */
+    frame.id = CAL_ID + '_1788453583961';
     frame.hidden = false;
-    frame.src = frame.getAttribute('data-src');
+    frame.src = CAL_URL;
     frame.addEventListener('load', function(){ if (loading) loading.hidden = true; });
 
     /* appended as a real element, because a script set through innerHTML never runs */
     var sc = document.createElement('script');
-    sc.src = 'https://link.msgsndr.com/js/form_embed.js';
+    sc.src = EMBED_SRC;
     sc.async = true;
     document.body.appendChild(sc);
 
     /* safety net for a widget that never renders at all */
     setTimeout(function(){
       if (frame.getBoundingClientRect().height < 260){
-        window.location.href = 'https://api.leadconnectorhq.com/widget/booking/dqB0NblntdSZnLlpSFEz';
+        window.location.href = CAL_URL;
       }
     }, 9000);
   }
