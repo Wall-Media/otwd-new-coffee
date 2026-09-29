@@ -1,0 +1,14 @@
+# Fails when a push or pull request leaves the site out of step with build.py
+# (a shared header, footer or Notes listing edited by hand, or build.py not run).
+name: build check
+on:
+  push:
+  pull_request:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # build.py reads git history for the sitemap's lastmod dates
+      - run: python3 build.py --check

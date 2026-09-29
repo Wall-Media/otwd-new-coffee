@@ -1,0 +1,8 @@
+#!/bin/sh
+# Stops a commit when build.py would still change something, so the shared parts
+# and the Notes listings can never go live out of step. Turn it on once per clone:
+#   git config core.hooksPath .githooks
+python3 build.py --check || {
+  echo "Run python3 build.py, add what it changed, and commit again."
+  exit 1
+}

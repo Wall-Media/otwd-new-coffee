@@ -1,0 +1,8 @@
+# Source and tooling. Used to build and maintain the site, not part of it, so not published.
+build.py
+partials/
+blog/categories.json
+.githooks/
+.github/
+SITE.md
+README.md

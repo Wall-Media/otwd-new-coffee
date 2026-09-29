@@ -1,0 +1,17 @@
+    <a class="post-card" href="/blog/{{slug}}">
+      <img class="post-card__thumb" src="{{thumb}}" width="320" height="240" alt="{{alt}}" loading="lazy">
+      <div class="post-card__content">
+        <div class="post-card__top">
+          <span class="post-card__cat">{{category}}</span>
+          <div class="post-card__meta">
+            <span>{{date}}</span>
+            <span>{{read}}</span>
+          </div>{{draft}}
+        </div>
+        <h2>{{title}}</h2>
+        <p class="post-card__blurb">{{blurb}}</p>
+        <div class="post-card__tags">
+{{tags}}
+        </div>
+      </div>
+    </a>

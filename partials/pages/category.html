@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{name}} · Notes · Off The Wall Digital</title>
+<meta name="description" content="{{description}}">
+<link rel="canonical" href="https://www.offthewalldigital.com/blog/category/{{slug}}">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{name}} · Notes · Off The Wall Digital">
+<meta property="og:description" content="{{description}}">
+<meta property="og:url" content="https://www.offthewalldigital.com/blog/category/{{slug}}">
+<meta property="og:locale" content="en_GB">
+<meta property="og:image" content="https://www.offthewalldigital.com/assets/img/share-shopfront.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{name}} · Notes · Off The Wall Digital">
+<meta name="twitter:description" content="{{description}}">
+<meta name="twitter:image" content="https://www.offthewalldigital.com/assets/img/share-shopfront.jpg">
+<link rel="alternate" type="application/rss+xml" title="Off The Wall Digital Notes" href="/rss.xml">
+<!-- block:fonts -->
+<!-- /block:fonts -->
+<!-- block:favicon --><!-- /block:favicon -->
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/notes.css">
+<link rel="stylesheet" href="/assets/css/notes-list.css">
+<style>
+.kicker{display:inline-flex;align-items:center;gap:9px;font-size:.7rem;font-weight:700;letter-spacing:.19em;text-transform:uppercase;color:var(--teal-dark);background:rgba(46,168,154,.1);border:1px solid rgba(46,168,154,.22);padding:7px 15px;border-radius:999px}
+.kicker i{width:7px;height:7px;border-radius:50%;background:var(--coral)}
+.hero h1{font-size:clamp(2.4rem,5.2vw,3.2rem);margin:22px 0 14px;font-variation-settings:"SOFT" 50,"WONK" 1}
+.hero p{font-size:1.1rem;color:var(--muted);max-width:38em;margin:0}
+</style>
+</head>
+<body>
+<!-- block:notes-header back_href="/blog" back_label="All notes" -->
+<!-- /block:notes-header -->
+
+<main>
+  <div class="wrap hero">
+    <span class="kicker"><i aria-hidden="true"></i>{{name}}</span>
+    <h1>{{heading}}</h1>
+    <p>{{intro}}</p>
+    <div class="cats">
+<!-- block:category-chips active="{{slug}}" -->
+<!-- /block:category-chips -->
+    </div>
+  </div>
+
+  <div class="wrap posts">
+<!-- block:post-cards category="{{slug}}" -->
+<!-- /block:post-cards -->
+  </div>
+</main>
+
+<!-- block:notes-footer -->
+<!-- /block:notes-footer -->
+
+<script>
+(function(){
+  var ys=document.querySelectorAll('.yr');
+  for(var i=0;i<ys.length;i++){ys[i].textContent=new Date().getFullYear();}
+})();
+</script>
+</body>
+</html>

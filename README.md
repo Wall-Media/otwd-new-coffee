@@ -110,40 +110,43 @@ Every image lives in the repo. Nothing is hotlinked from another host.
 
 Keep new images around 1600px wide at most and compressed, since there is no build step.
 
+## Build script
+
+The shared parts of every page (fonts, tab icon, logo mark, headers, footers, legal line) and
+the whole Notes index (post cards, category and tag pages, `rss.xml`, `sitemap.xml`) are kept
+in step by `build.py`. Python 3, nothing to install. After any edit:
+
+```
+python3 build.py
+```
+
+and commit what it changed. `python3 build.py --check` changes nothing and fails if anything
+is out of date. Turn on the pre-commit check once per clone:
+
+```
+git config core.hooksPath .githooks
+```
+
+Shared regions sit between `<!-- block:name -->` and `<!-- /block:name -->` markers. Edit the
+matching file in `partials/`, never the region in the page. SITE.md has the details and the
+recipes.
+
 ## Blog structure
 
-The Notes section (`/blog/`) is a static HTML blog. No build step, no CMS, no Markdown pipeline.
+The Notes section (`/blog`) is static HTML. Posts are hand-written HTML files in `blog/`;
+everything that lists them is generated.
 
-**Adding a note:**
-
-1. Create `blog/<slug>.html` following the pattern in `your-website-should-feel-like-meeting-you.html`
-2. Set unique title, meta description, canonical URL
-3. For drafts: use `<meta name="robots" content="noindex,nofollow">` and show the Draft label
-4. For published: use `<meta name="robots" content="index,follow">` and remove the Draft label
-5. Include JSON-LD BlogPosting structured data with author (Petro Wall), publisher (Wall Media Ltd), datePublished, dateModified, keywords (from tags), and articleSection (from category)
-6. Assign one category and 2-4 tags
-7. Add the note card to `blog/index.html`
-8. Add the note card to the relevant category page (`blog/category/<slug>.html`)
-9. Add the note card to each tag page (`blog/tag/<slug>.html`)
-10. If published, add to `rss.xml`. Exclude drafts from RSS
-11. If published, add to `sitemap.xml`. Omit drafts from sitemap
-
-**Adding a category:**
-
-1. Create `blog/category/<slug>.html` following the existing pattern
-2. Add the category chip to `blog/index.html`
-3. Add the category page to `sitemap.xml`
-
-**Adding a tag:**
-
-1. Create `blog/tag/<slug>.html` following the existing pattern
-2. Add the tag page to `sitemap.xml`
+**Adding a note:** copy an existing post to `blog/<slug>.html`, add its image at
+`assets/blog/<slug>.png`, set its details (the JSON-LD headline, description, dates, category,
+tags and image, plus the matching hero), and run `python3 build.py`. The build adds the card
+everywhere, creates any new category or tag page, and updates RSS and the sitemap. A new
+category needs its wording in `blog/categories.json` first; the build tells you if it is
+missing.
 
 **Author card:** every note ends with the same Petro call-out (`aside.author-card`), photo at `assets/blog/petro.jpg`. Copy it from an existing post. Do not rewrite per note.
 
-**Draft vs published:**
-
-Draft posts carry `noindex,nofollow` and show a Draft label. They may appear in blog listings but are excluded from RSS and sitemap. Published posts carry `index,follow`, have no Draft label, and appear everywhere.
+**Draft vs published:** a post with `noindex,nofollow` is a draft. It is listed with a Draft
+label but left out of RSS and the sitemap. `index,follow` publishes it.
 
 ## Still outstanding
 

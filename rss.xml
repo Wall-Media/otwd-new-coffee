@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Off The Wall Digital · Notes</title>
-    <link>https://www.offthewalldigital.com/blog/</link>
+    <link>https://www.offthewalldigital.com/blog</link>
     <description>Notes from Petro Wall. How you show up online, how the work gets done, and the small shifts that make room for a life again.</description>
     <language>en-GB</language>
     <atom:link href="https://www.offthewalldigital.com/rss.xml" rel="self" type="application/rss+xml"/>
@@ -10,7 +10,7 @@
       <title>Your website should feel like meeting you</title>
       <link>https://www.offthewalldigital.com/blog/your-website-should-feel-like-meeting-you</link>
       <guid>https://www.offthewalldigital.com/blog/your-website-should-feel-like-meeting-you</guid>
-      <pubDate>Sun, 22 Sep 2026 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
       <description>Most sites feel like a form. I build ones that feel like meeting you: warm, clear, and worth ringing instead of the next result on the list.</description>
       <category>Websites</category>
     </item>
