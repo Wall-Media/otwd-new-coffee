@@ -160,7 +160,7 @@ full `https://www.offthewalldigital.com/assets/...` URL in og:image, twitter:ima
 |---|---|
 | assets/img/hero-shut.jpg | index.html hero, "before" side of the slider |
 | assets/img/hero-open.jpg | index.html hero, "after" side of the slider (resized to 1600px to match) |
-| assets/img/case-mamas.jpg, case-ocean.jpg, case-boiler.jpg, case-ignite.jpg | index.html case study cards |
+| assets/img/case-mamas.jpg, case-ocean.jpg, case-boiler.jpg, case-ignite.jpg | index.html "Recent projects" cards |
 | assets/img/share-shopfront.jpg | the default social share image: og:image and twitter:image on every page except notes with their own hero image, and 404.html |
 | assets/blog/petro.jpg | index.html About portrait, and the author card on every note |
 | assets/blog/<slug>.png | each note's hero image and listing thumbnail |
@@ -269,7 +269,7 @@ it is legally required to say, pass it on, and never partially do it.
 
 **The booking page.** Booking no longer happens in a popup on index.html. Every coffee call to
 action is a plain link to the booking page, `/coffee` (five in index.html: desktop nav, mobile
-nav, hero, "Is this you", case studies, plus two in the first note). Do not point a coffee CTA straight at the external calendar.
+nav, hero, "Is this you", "Recent projects", plus two in the first note). Do not point a coffee CTA straight at the external calendar.
 
 **The booking widget ID.** The GoHighLevel calendar ID `dqB0NblntdSZnLlpSFEz` appears **twice,
 both in coffee.html**: the `CAL_ID` constant at the top of the booking section of the script,
@@ -302,7 +302,7 @@ prefilled mailto, but changing it otherwise breaks enquiry delivery silently.
 of search.
 
 **Inline SVG.** The shopfront illustration is around 120 lines and the back-of-house diagram
-another 80, plus browser chrome on every case study card. Copy near them can be edited; SVG
+another 80, plus browser chrome on every "Recent projects" card. Copy near them can be edited; SVG
 attributes must not be touched or the artwork corrupts.
 
 **`[hidden]{display:none!important}`.** Declared in index.html, coffee.html, privacy.html and
@@ -332,7 +332,7 @@ is her shopfront.
   reuse a phrase twice on the same page.
 - **SVG line art only, never emoji.**
 - Calls to action are coffee invitations, warming down the page: "Fancy a coffee?" in the nav,
-  "Start with a coffee" in the hero, "Tell me about yours" after the case studies, "Put the
+  "Start with a coffee" in the hero, "Tell me about yours" after "Recent projects", "Put the
   kettle on" at the close. Never "Book a call" or "Have a chat". Because coffee implies
   meeting and Petro is Ramsgate based, the contact copy stays honest: a coffee if you are
   local, a phone call if you are not.

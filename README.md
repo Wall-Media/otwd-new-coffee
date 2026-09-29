@@ -8,7 +8,7 @@ Serve the folder over HTTP and it works.
 
 | File | What it is |
 | --- | --- |
-| `index.html` | The whole marketing site: hero, outcomes, "Is this you", front of house / back of house, four case studies, the week graphic, About, and the contact section. |
+| `index.html` | The whole marketing site: hero, outcomes, "Is this you", front of house / back of house, four recent projects, the week graphic, About, and the contact section. |
 | `blog/index.html` | Notes listing page. Short thoughts on running a small business without drowning in your own admin. |
 | `blog/*.html` | Individual note pages. Each one is a standalone HTML file with its own header, footer, and the full legal footer. |
 | `coffee.html` | The booking page. Every coffee call to action links here. Holds the LeadConnector calendar, which sizes itself, so it needs a full page rather than a modal to grow into. |
@@ -104,7 +104,7 @@ Every image lives in the repo. Nothing is hotlinked from another host.
 
 - `assets/img/` holds the marketing images: `hero-shut.jpg` and `hero-open.jpg` (the hero
   before and after slider), `case-mamas.jpg`, `case-ocean.jpg`, `case-boiler.jpg`,
-  `case-ignite.jpg` (case study screenshots) and `share-shopfront.jpg` (social share image).
+  `case-ignite.jpg` (recent project screenshots) and `share-shopfront.jpg` (social share image).
 - `assets/blog/` holds Petro's portrait `petro.jpg` (used on the home page and on every
   note's author card) and each note's featured image.
 
@@ -151,7 +151,7 @@ label but left out of RSS and the sitemap. `index,follow` publishes it.
 ## Still outstanding
 
 - Four client testimonial quotes.
-- One real result per case study (hours saved, or the client's own words). The case studies
+- One real result per recent project (hours saved, or the client's own words). The projects
   are written as "Before" and "Now" with a deliberate gap where a result belongs.
 
 ## Legal
