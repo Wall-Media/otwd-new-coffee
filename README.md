@@ -15,6 +15,8 @@ Serve the folder over HTTP and it works.
 | `thanks.html` | Post-booking thank you page. Set this as the calendar's redirect URL in GoHighLevel. Marked `noindex`. |
 | `privacy.html` | Combined privacy notice and terms of use, tabbed, deep linkable at `#privacy` and `#terms`. |
 | `blog/` | Notes section. Static HTML blog with categories and tags. See Blog structure below. |
+| `404.html` | Branded "page not found" page. Vercel serves it automatically for any missing URL. |
+| `robots.txt` | Lets every crawler in and points at the sitemap. |
 | `rss.xml` | RSS feed for published notes. |
 | `sitemap.xml` | Site sitemap. |
 

@@ -77,6 +77,8 @@ The safety rules below do not relax because there is no preview. The stop list s
 | blog/your-website-should-feel-like-meeting-you.html | /blog/your-website-should-feel-like-meeting-you | First published note, and the template for every new note. |
 | blog/category/websites.html | /blog/category/websites | Category listing for Websites notes. |
 | blog/tag/*.html | /blog/tag/* | Tag listing pages (websites, brand-voice, small-business). |
+| 404.html | any missing URL | Vercel serves it automatically with a 404 status. `noindex`. Uses root-absolute links (`/`, `/blog`, `/coffee`) because it can appear at any depth. |
+| robots.txt | /robots.txt | Allows everything and points crawlers at the sitemap. Do not disallow thanks.html here: crawlers need to fetch it to see its `noindex`. |
 | rss.xml | /rss.xml | RSS feed for published notes. Excludes drafts. |
 | sitemap.xml | /sitemap.xml | Site sitemap including blog pages. Draft posts omitted. |
 | README.md | — | Petro's conventions and copy rules. Read it alongside this file. |
@@ -92,7 +94,7 @@ full `https://www.offthewalldigital.com/assets/...` URL in og:image, twitter:ima
 | assets/img/hero-shut.jpg | index.html hero, "before" side of the slider |
 | assets/img/hero-open.jpg | index.html hero, "after" side of the slider (resized to 1600px to match) |
 | assets/img/case-mamas.jpg, case-ocean.jpg, case-boiler.jpg, case-ignite.jpg | index.html case study cards |
-| assets/img/share-shopfront.jpg | og:image and twitter:image on index.html and coffee.html |
+| assets/img/share-shopfront.jpg | the default social share image: og:image and twitter:image on every page except notes with their own hero image, and 404.html |
 | assets/blog/petro.jpg | index.html About portrait, and the author card on every note |
 | assets/blog/<slug>.png | each note's hero image and listing thumbnail |
 
@@ -275,6 +277,12 @@ no build step to do that for you. Reference it by root-absolute path.
 **Edit copy in a section with an illustration.** Change the text nodes only. Leave every SVG
 attribute alone.
 
+**Share image and canonical on every page.** Every indexable page carries `rel="canonical"`,
+og:title, og:description, og:url, og:image and the matching twitter tags with
+`twitter:card` set to `summary_large_image`. Use the clean URL with no `.html` and no trailing
+slash (`/coffee`, `/blog`), because Vercel redirects the other forms. Use
+`share-shopfront.jpg` as og:image unless the page has its own hero image.
+
 **Add a booking CTA.** Copy an existing one. It is a plain link to the booking page:
 `./coffee.html` from a root page, `/coffee` from Notes. Use coffee wording from the copy rules.
 
@@ -371,15 +379,12 @@ Recorded so they get fixed rather than rediscovered.
   want a single `assets/site.css`. This is the biggest one.
 - The booking widget ID should be a single constant at the top of coffee.html's script block
   the way `ENQUIRY_WEBHOOK` is in index.html, which would turn five occurrences into one.
-- No `robots.txt`, so nothing points crawlers at the sitemap.
-- No `404.html`, so a mistyped URL shows Vercel's default error page.
-- No social share image on privacy.html, thanks.html, or the Notes listing, category and tag
-  pages.
 - No logo or icon files. The favicon is an inline SVG data URI in every page, and there is no
   Apple touch icon.
 - privacy.html section 07 says "Ask us using the email button below", but that page has no
   email button, only the "Send a message" footer link. This is copy on the legal page, so it
   needs Petro's wording.
 
-Fixed on 29 September 2026: the external images now live in the repo, and the email assembly
-exists in one file only.
+Fixed on 29 September 2026: the external images now live in the repo, the email assembly
+exists in one file only, robots.txt and a branded 404.html exist, every page has a social share
+image, and canonical URLs match the clean URLs Vercel actually serves.
