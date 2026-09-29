@@ -21,36 +21,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Karla:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2036%2036%27%3E%3Ccircle%20cx%3D%2718%27%20cy%3D%274%27%20r%3D%271.4%27%20fill%3D%27%232a2e21%27%2F%3E%3Cline%20x1%3D%2718%27%20y1%3D%275.2%27%20x2%3D%2710%27%20y2%3D%2712%27%20stroke%3D%27%232a2e21%27%20stroke-width%3D%271.5%27%2F%3E%3Cline%20x1%3D%2718%27%20y1%3D%275.2%27%20x2%3D%2726%27%20y2%3D%2712%27%20stroke%3D%27%232a2e21%27%20stroke-width%3D%271.5%27%2F%3E%3Cg%20transform%3D%27rotate%28-9%2018%2021%29%27%3E%3Crect%20x%3D%277%27%20y%3D%2711%27%20width%3D%2722%27%20height%3D%2720%27%20rx%3D%272%27%20fill%3D%27%23ffffff%27%20stroke%3D%27%232a2e21%27%20stroke-width%3D%272.2%27%2F%3E%3Crect%20x%3D%2710.5%27%20y%3D%2714.5%27%20width%3D%2715%27%20height%3D%2713%27%20fill%3D%27%232ea89a%27%2F%3E%3Ccircle%20cx%3D%2723.5%27%20cy%3D%2725.5%27%20r%3D%271.6%27%20fill%3D%27%23e8547a%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
 
+<link rel="stylesheet" href="/assets/css/site.css">
 <style>
-:root{
-  --cream:#fdf8ec;
-  --bone:#f6efdf;
-  --sage:#e9ecda;
-  --tealwash:#e3efec;
-  --coralwash:#fbeae7;
-  --ink:#2f3327;
-  --head:#2a2e21;
-  --muted:#6d7360;
-  --green:#6f7d45;
-  --green-deep:#5c6939;
-  --teal:#2ea89a;
-  --teal-dark:#237a70;
-  --gold:#e3b23c;
-  --gold-dark:#c9911f;
-  --coral:#e8547a;
-  --coral-dark:#c23e63;
-  --link:#4d8b7f;
-  --pane-border:rgba(47,51,39,.16);
-  --shadow-s:0 2px 8px rgba(47,51,39,.06);
-  --shadow-m:0 18px 40px -22px rgba(47,51,39,.34);
-  --shadow-l:0 42px 90px -40px rgba(47,51,39,.42);
-  --spring:cubic-bezier(.34,1.56,.64,1);
-  --maxw:1240px;
-  --gutter:clamp(20px,5vw,64px);
-}
-
-*{box-sizing:border-box}
-[hidden]{display:none!important}
 html{scroll-behavior:smooth;scroll-padding-top:92px;-webkit-text-size-adjust:100%}
 body{
   margin:0;
@@ -585,12 +557,6 @@ section{position:relative}
   .f input,.f textarea{font-size:16px}
 }
 .sent p{font-size:.89rem;color:var(--muted);margin:0 auto 16px;max-width:36ch}
-</style>
-<style>
-.ha-img-placeholder{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;background:#f4f4f5;border:1px dashed #d4d4d8;border-radius:8px;color:#71717a;font-size:12px;font-family:system-ui,sans-serif;min-height:80px;padding:16px;box-sizing:border-box;animation:ha-img-pulse 1.5s ease-in-out infinite}
-.ha-img-placeholder.ha-failed{animation:none;opacity:.7}
-@keyframes ha-img-pulse{0%,100%{opacity:1}50%{opacity:.5}}
-@media(prefers-color-scheme:dark){.ha-img-placeholder{background:#27272a;border-color:#3f3f46;color:#a1a1aa}}
 </style>
 </head>
 <body>

@@ -1,0 +1,32 @@
+/* Off The Wall Digital, shared foundation. Loaded by every page, before the page's own <style>.
+   The design tokens live here and nowhere else. thanks.html and 404.html override
+   --maxw and --gutter on purpose (a narrower column); do not "fix" that. */
+
+:root{
+  --cream:#fdf8ec;
+  --bone:#f6efdf;
+  --sage:#e9ecda;
+  --tealwash:#e3efec;
+  --coralwash:#fbeae7;
+  --ink:#2f3327;
+  --head:#2a2e21;
+  --muted:#6d7360;
+  --green:#6f7d45;
+  --green-deep:#5c6939;
+  --teal:#2ea89a;
+  --teal-dark:#237a70;
+  --gold:#e3b23c;
+  --gold-dark:#c9911f;
+  --coral:#e8547a;
+  --coral-dark:#c23e63;
+  --link:#4d8b7f;
+  --pane-border:rgba(47,51,39,.16);
+  --shadow-s:0 2px 8px rgba(47,51,39,.06);
+  --shadow-m:0 18px 40px -22px rgba(47,51,39,.34);
+  --shadow-l:0 42px 90px -40px rgba(47,51,39,.42);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --maxw:1240px;
+  --gutter:clamp(20px,5vw,64px);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}

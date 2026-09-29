@@ -2,8 +2,9 @@
 
 Read this before changing anything on this site.
 
-This file exists because the site has no build step and no shared stylesheet, so the same
-thing lives in several places. This is the map. It was written from a full read of every file
+This file exists because the site has no build step, so the same thing (headers, footers, legal
+text, head tags) lives in several places. Shared CSS now lives in `assets/css/`, but each page
+still carries its own page specific `<style>`. This is the map. It was written from a full read of every file
 on 4 September 2026 and re-checked against the code on 29 September 2026.
 
 ---
@@ -102,8 +103,8 @@ full `https://www.offthewalldigital.com/assets/...` URL in og:image, twitter:ima
 
 ## The design system
 
-Defined as CSS custom properties in a `:root` block. Use these tokens, never raw hex values,
-and never introduce a colour that is not here.
+Defined as CSS custom properties in the `:root` block of `assets/css/site.css`, the one place
+they live. Use these tokens, never raw hex values, and never introduce a colour that is not here.
 
 ```css
 --cream:#fdf8ec; --bone:#f6efdf; --sage:#e9ecda; --tealwash:#e3efec; --coralwash:#fbeae7;
@@ -127,25 +128,31 @@ base, some headings running SOFT 60 to 80), and Karla for body and UI. Primary b
 
 **This site is cream and never dark.** There is no dark mode and none should be added.
 
-### The token blocks are NOT identical across files
+### Shared stylesheets
 
-This is the trap. Each file has its own `:root` and they hold different subsets.
+Every page links its shared CSS first, then keeps its own `<style>` block for what is unique to
+it. The inline block comes after the links, so a page can still override a shared rule.
 
-- **index.html** has the full set above.
-- **coffee.html** is a mid-sized set with index's `--maxw:1240px` and `--gutter`. It has no
-  `--tealwash`, `--coralwash`, `--green-deep`, `--link`, `--pane-border` or `--shadow-s`.
-- **thanks.html** has the same set as coffee.html, but deliberately uses **different values**:
-  `--maxw:1000px` and `--gutter:clamp(20px,5vw,56px)` against index's 1240px and 64px. Those
-  differences are intentional, do not "fix" them.
-- **privacy.html and all six Notes pages** (blog index, the post, category and tag pages) share
-  the condensed set: `--cream`, `--bone`, `--ink`, `--head`, `--muted`, `--green`, `--teal`,
-  `--teal-dark`, `--gold`, `--coral`, `--link`, `--shadow-m`, `--spring`. No `--maxw` or
-  `--gutter`.
+| File | Loaded by | Holds |
+|---|---|---|
+| assets/css/site.css | every page | the design tokens, `*{box-sizing:border-box}`, `[hidden]{display:none!important}` |
+| assets/css/page.css | coffee.html, thanks.html, 404.html | the simple page shell: `header.top`, glow, eyebrow, buttons, footer |
+| assets/css/notes.css | all Notes pages | Notes base type, topbar, footer, focus ring, reduced motion |
+| assets/css/notes-list.css | blog index, category and tag pages | listing layout, post cards and thumbnails, category chips |
 
-So a token change that should apply site-wide is a ten-file change, and you must check which
-tokens each file actually declares before assuming one exists there.
+Link them with root-absolute paths (`/assets/css/site.css`), in that order, directly before the
+page's `<style>`. index.html and privacy.html load only site.css; their CSS is unique to them.
 
-The Google Fonts link also comes in two versions. index.html, coffee.html and thanks.html load
+The one deliberate token difference: thanks.html and 404.html set `--maxw:1000px` and
+`--gutter:clamp(20px,5vw,56px)` in their own `<style>`, against site.css's 1240px and 64px.
+That is intentional, do not "fix" it.
+
+A rule belongs in a shared file only if it is character for character the same on every page
+that loads that file. Same selector with different values (the Notes listing `.kicker`,
+`.hero h1` and `.hero p` differ between the index/category pages and the tag pages) stays in
+each page's own `<style>`. When you change a shared file, check every page that loads it.
+
+The Google Fonts link also comes in two versions. index.html, coffee.html, thanks.html and 404.html load
 Fraunces and Karla with italics; privacy.html and the Notes pages load them without. Keep each
 file on the version it already uses unless the change is meant to add italics.
 
@@ -266,9 +273,8 @@ is her shopfront.
 **Add a phone number back.** Only if Petro asks. See Shared values above: it was removed on
 4 September 2026, so there is nothing to find and replace.
 
-**Change a colour or spacing token.** Up to ten files, and check which tokens each one
-actually declares before editing (see the token blocks above). Remember thanks.html
-deliberately differs on `--maxw` and `--gutter`.
+**Change a colour or spacing token.** One place: `assets/css/site.css`. Remember thanks.html
+and 404.html deliberately override `--maxw` and `--gutter`.
 
 **Add or replace an image.** Save it into `assets/img/` (or `assets/blog/` for Notes), never
 hotlink it from another host. Keep it around 1600px wide at most and compress it; the site has
@@ -286,10 +292,10 @@ slash (`/coffee`, `/blog`), because Vercel redirects the other forms. Use
 **Add a booking CTA.** Copy an existing one. It is a plain link to the booking page:
 `./coffee.html` from a root page, `/coffee` from Notes. Use coffee wording from the copy rules.
 
-**Add a page.** No template exists, so the new page needs the head boilerplate, a `:root`
-block, its own header and footer with the legal text, and a "Send a message" link to
-`./#enquiry` rather than its own copy of the email script. Match
-privacy.html's simpler structure rather than index.html's. Vercel serves a new .html file at
+**Add a page.** Copy 404.html as the template: it links site.css and page.css, has the
+simple header and the legal footer, and uses root-absolute links. Add only what is unique to the
+new page in its own `<style>`, and a "Send a message" link to `/#enquiry` rather than its own
+copy of the email script. Never copy index.html's header structure. Vercel serves a new .html file at
 its clean URL with no config change. Update the nav in whichever files carry links.
 
 **Add a note (blog post).** Create a new HTML file in `blog/` following the pattern in
@@ -348,8 +354,8 @@ not relative paths (`./category/websites.html`, `./<slug>.html`). With `trailing
 against `/` (parent of last segment), not `/blog/`, causing 404s.
 
 **Notes listing spacing.** All Notes listing pages (blog index, category, and tag pages) follow
-the same tighter spacing standard to avoid large empty cream voids between sections. The
-standing CSS values are:
+the same tighter spacing standard to avoid large empty cream voids between sections. These
+rules live once, in `assets/css/notes-list.css`. The standing CSS values are:
 
 - `.hero` padding: `clamp(56px,9vw,90px) clamp(20px,5vw,40px) clamp(24px,4vw,40px)` (top, 
   horizontal, bottom). Bottom padding is intentionally short (24–40px) to keep category chips 
@@ -375,8 +381,9 @@ thumbnail layout and 24px margin between cards.
 
 Recorded so they get fixed rather than rediscovered.
 
-- **No shared stylesheet.** Ten `:root` blocks, ten style blocks and two Google Fonts links
-  want a single `assets/site.css`. This is the biggest one.
+- Headers, footers and head tags are still copied into every page, because there is no
+  build step to include them. Changing the footer or nav still means editing every page.
+- Two versions of the Google Fonts link (with and without italics) are still in use.
 - The booking widget ID should be a single constant at the top of coffee.html's script block
   the way `ENQUIRY_WEBHOOK` is in index.html, which would turn five occurrences into one.
 - No logo or icon files. The favicon is an inline SVG data URI in every page, and there is no
@@ -386,4 +393,6 @@ Fixed on 29 September 2026: the external images now live in the repo, the email 
 exists in one file only, robots.txt and a branded 404.html exist, every page has a social share
 image, and canonical URLs match the clean URLs Vercel actually serves. privacy.html section 07 now
 points rights requests at the enquiry form instead of an email button that no longer exists
-(option chosen by Colin).
+(option chosen by Colin). Shared CSS moved into `assets/css/` with a computed style check on
+every element of every page at four widths showing no visual change, and the unused Hyperagent
+`.ha-img-placeholder` style blocks were removed from index.html and privacy.html.

@@ -1,0 +1,21 @@
+/* Shared by every Notes page (blog index, posts, category and tag pages):
+   base type, topbar, footer, focus and reduced motion. Loaded after site.css. */
+
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--cream);color:var(--ink);
+  font-family:Karla,system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--link);text-decoration:none}
+a:hover{color:var(--teal-dark)}
+:focus-visible{outline:3px solid var(--teal);outline-offset:3px;border-radius:6px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;color:var(--head);font-variation-settings:"SOFT" 40,"WONK" 1;letter-spacing:-.02em;line-height:1.1;margin:0;text-wrap:balance;font-weight:600}
+.topbar{border-bottom:1px solid rgba(47,51,39,.1);background:rgba(253,248,236,.9);position:sticky;top:0;z-index:10;backdrop-filter:blur(12px)}
+.topbar__in{display:flex;align-items:center;gap:12px;height:70px;max-width:960px;margin:0 auto;padding:0 clamp(20px,5vw,40px)}
+.brand{display:flex;align-items:center;gap:11px;color:var(--head);text-decoration:none}
+.brand__name{font-family:Fraunces,serif;font-weight:700;font-size:1rem;letter-spacing:-.02em}
+.back{margin-left:auto;font-weight:700;font-size:.9rem;text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+.foot__in{max-width:960px;margin:0 auto;padding:0 clamp(20px,5vw,40px);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:flex-start}
+.foot a{font-weight:600}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}

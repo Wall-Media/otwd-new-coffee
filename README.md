@@ -92,7 +92,7 @@ pre-filled with everything they typed, so an enquiry is never lost silently. Set
   at runtime in `index.html` only, and used as the fallback when the enquiry form cannot
   send. Other pages link to `./#enquiry` rather than carry their own copy. There is no
   phone number on the site.
-- **Cream palette only, never dark, and no light/dark toggle.** Tokens live in `:root`.
+- **Cream palette only, never dark, and no light/dark toggle.** Tokens live in `assets/css/site.css`.
 - **SVG line art, never emoji.**
 - Calls to action are coffee invitations that warm up down the page: "Fancy a coffee?",
   "Start with a coffee", "That sounds like me", "Tell me about yours", "Put the kettle on".

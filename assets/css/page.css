@@ -1,0 +1,33 @@
+/* Simple page shell shared by coffee.html, thanks.html and 404.html:
+   header.top, the decorative glow, eyebrow, buttons and footer. Loaded after site.css. */
+
+h1,h2,h3{font-family:Fraunces,Georgia,serif;color:var(--head);margin:0;line-height:1.1}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter)}
+a{color:var(--teal-dark)}
+.glow{position:absolute;border-radius:50%;filter:blur(70px);z-index:-1;pointer-events:none}
+.glow--a{width:min(46vw,480px);aspect-ratio:1;right:-8%;top:-14%;background:radial-gradient(circle,rgba(227,178,60,.45),transparent 66%)}
+.glow--b{width:min(40vw,420px);aspect-ratio:1;left:-14%;top:34%;background:radial-gradient(circle,rgba(46,168,154,.32),transparent 66%)}
+header.top{border-bottom:1px solid rgba(47,51,39,.1);background:rgba(253,248,236,.9);backdrop-filter:blur(8px);position:sticky;top:0;z-index:20}
+.top__in{display:flex;align-items:center;gap:18px;height:74px;max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter)}
+.brand{display:inline-flex;align-items:center;gap:11px;text-decoration:none;color:var(--head)}
+.brand__name{font-family:Fraunces,serif;font-weight:700;font-size:1.02rem;line-height:1.1;display:block}
+.brand__name span{display:block;font-family:Karla,sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;background:rgba(46,168,154,.13);
+  border:1px solid rgba(46,168,154,.3);color:var(--teal-dark);
+  font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  padding:8px 15px;border-radius:999px;
+}
+.eyebrow i{width:6px;height:6px;border-radius:50%;background:var(--coral);display:inline-block}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;font-family:Karla,sans-serif;font-weight:700;font-size:.92rem;
+  padding:12px 22px;border-radius:999px;border:1.5px solid transparent;cursor:pointer;text-decoration:none;
+  transition:transform .35s var(--spring),box-shadow .35s var(--spring);white-space:nowrap;
+}
+.btn--primary{background:linear-gradient(120deg,var(--green),var(--teal));color:var(--cream)}
+.btn--primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 18px 34px -16px rgba(46,168,154,.85)}
+.btn--ghost{background:transparent;color:var(--ink);border-color:rgba(47,51,39,.25)}
+.btn--ghost:hover{transform:translateY(-3px);border-color:var(--teal);box-shadow:var(--shadow-m)}
+.foot__in{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter);display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+.foot__legal{font-size:.76rem;color:var(--muted);margin:0;max-width:70ch}
+.sep{color:rgba(47,51,39,.3)}
