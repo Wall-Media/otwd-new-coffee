@@ -479,6 +479,13 @@ thumbnail layout and 24px margin between cards.
 Recorded so they get fixed rather than rediscovered.
 
 - A post's read time (`meta__read`) is hand-written and not checked.
+- **Booking form forces marketing consent (GoHighLevel setting, not site code).** The calendar's
+  details form will not submit until the visitor ticks "I confirm that I want to receive content
+  from this company using any contact information I provide." Consent to marketing cannot be a
+  condition of booking under UK rules, and it contradicts the privacy notice and the enquiry
+  form's "No newsletter, no list". Found 29 September 2026 during a test booking; Petro is to
+  make it optional or remove it in the calendar's form settings, then a test booking is rerun.
+  The calendar also takes bookings more than a year ahead; Petro may want a booking window.
 - JSON-LD `dateModified` is set by hand.
 - **No logo yet.** One will be designed as an SVG later. Until then the "crooked frame" mark
   stands in, and it is not a finished logo. It lives in `partials/mark.html` (the header mark,
