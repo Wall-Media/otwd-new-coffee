@@ -12,6 +12,8 @@ header.top{border-bottom:1px solid rgba(47,51,39,.1);background:rgba(253,248,236
 .brand{display:inline-flex;align-items:center;gap:11px;text-decoration:none;color:var(--head)}
 .brand__name{font-family:Fraunces,serif;font-weight:700;font-size:1.02rem;line-height:1.1;display:block}
 .brand__name span{display:block;font-family:Karla,sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.back{margin-left:auto;font-size:.9rem;font-weight:700;text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;gap:8px}
+.back:hover{color:var(--teal-dark)}
 .eyebrow{
   display:inline-flex;align-items:center;gap:9px;background:rgba(46,168,154,.13);
   border:1px solid rgba(46,168,154,.3);color:var(--teal-dark);
