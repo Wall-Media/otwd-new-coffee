@@ -4,7 +4,7 @@ Read this before changing anything on this site.
 
 This file exists because the site has no build step and no shared stylesheet, so the same
 thing lives in several places. This is the map. It was written from a full read of every file
-on 4 September 2026.
+on 4 September 2026 and re-checked against the code on 29 September 2026.
 
 ---
 
@@ -17,7 +17,7 @@ the change, and flag the difference so this file gets corrected.
 
 Two specific traps that a single find-and-replace will miss, both explained below: the booking
 widget ID is embedded inside an element ID as well as in URLs, and the email address is
-assembled from arrays that are split differently in different files.
+assembled from split arrays, so searching for the address itself finds nothing.
 
 ---
 
@@ -30,7 +30,7 @@ Pushing to `main` deploys straight to production. **On this site that is the agr
 working**, decided by Colin on 4 September 2026. Commit to main, let it go live, then show
 Petro. Do not open branches and pull requests for ordinary changes here.
 
-`vercel.json` sets `cleanUrls: true` and `trailingSlash: false` so canonical paths like `/blog/why-your-website-should-feel-like-you` and `/coffee` resolve without the `.html` suffix. Keep that file. Do not remove it to "simplify" the deploy.
+`vercel.json` sets `cleanUrls: true` and `trailingSlash: false` so canonical paths like `/blog/your-website-should-feel-like-meeting-you` and `/coffee` resolve without the `.html` suffix. It also carries a permanent redirect from the first post's old slug (`/blog/why-your-website-should-feel-like-you`). Keep that file. Do not remove it to "simplify" the deploy.
 
 ### Why this site works differently from a client site
 
@@ -69,21 +69,32 @@ The safety rules below do not relax because there is no preview. The stop list s
 
 | File | Serves | Notes |
 |---|---|---|
-| index.html | / | The whole marketing site, 92,918 bytes, about 1,723 lines. Readable, not minified. |
+| index.html | / | The whole marketing site, about 89,500 bytes and 1,640 lines. Readable, not minified. Holds the enquiry form. |
+| coffee.html | /coffee | The booking page. Every coffee call to action links here. Holds the GoHighLevel calendar embed, which needs a full page to grow into. |
 | privacy.html | /privacy | Privacy and terms, tabbed. |
 | thanks.html | /thanks | Post-booking landing page. Carries `noindex,nofollow` deliberately, set as the calendar's redirect URL in GoHighLevel. Do not remove the robots tag. |
 | blog/index.html | /blog | Notes listing page with category filter chips and rich post cards. Canonical URL is /blog (no trailing slash). |
-| blog/why-your-website-should-feel-like-you.html | /blog/why-your-website-should-feel-like-you | Draft post (noindex). First note on brand voice and websites. |
+| blog/your-website-should-feel-like-meeting-you.html | /blog/your-website-should-feel-like-meeting-you | First published note, and the template for every new note. |
 | blog/category/websites.html | /blog/category/websites | Category listing for Websites notes. |
 | blog/tag/*.html | /blog/tag/* | Tag listing pages (websites, brand-voice, small-business). |
 | rss.xml | /rss.xml | RSS feed for published notes. Excludes drafts. |
 | sitemap.xml | /sitemap.xml | Site sitemap including blog pages. Draft posts omitted. |
 | README.md | — | Petro's conventions and copy rules. Read it alongside this file. |
 
-Most marketing images are still hosted externally on pub.hyperagent.com (hero before and after,
-four case study screenshots). Petro's Notes author portrait is in-repo at
-`assets/blog/petro.jpg`. Moving the remaining Hyperagent images into `assets/` is still
-outstanding work, already flagged in the README.
+### Images
+
+Every image is in the repo. Nothing is loaded from pub.hyperagent.com any more (moved on
+29 September 2026). Reference images with root-absolute paths (`/assets/...`), and use the
+full `https://www.offthewalldigital.com/assets/...` URL in og:image, twitter:image and JSON-LD.
+
+| File | Used by |
+|---|---|
+| assets/img/hero-shut.jpg | index.html hero, "before" side of the slider |
+| assets/img/hero-open.jpg | index.html hero, "after" side of the slider (resized to 1600px to match) |
+| assets/img/case-mamas.jpg, case-ocean.jpg, case-boiler.jpg, case-ignite.jpg | index.html case study cards |
+| assets/img/share-shopfront.jpg | og:image and twitter:image on index.html and coffee.html |
+| assets/blog/petro.jpg | index.html About portrait, and the author card on every note |
+| assets/blog/<slug>.png | each note's hero image and listing thumbnail |
 
 ---
 
@@ -119,47 +130,58 @@ base, some headings running SOFT 60 to 80), and Karla for body and UI. Primary b
 This is the trap. Each file has its own `:root` and they hold different subsets.
 
 - **index.html** has the full set above.
-- **privacy.html** is condensed. It is missing `--sage`, `--tealwash`, `--coralwash`,
-  `--green-deep`, `--gold-dark`, `--coral-dark`, `--pane-border`, `--shadow-s`, `--shadow-l`,
-  `--maxw` and `--gutter`.
-- **thanks.html** sits in between, and deliberately uses **different values**:
+- **coffee.html** is a mid-sized set with index's `--maxw:1240px` and `--gutter`. It has no
+  `--tealwash`, `--coralwash`, `--green-deep`, `--link`, `--pane-border` or `--shadow-s`.
+- **thanks.html** has the same set as coffee.html, but deliberately uses **different values**:
   `--maxw:1000px` and `--gutter:clamp(20px,5vw,56px)` against index's 1240px and 64px. Those
   differences are intentional, do not "fix" them.
+- **privacy.html and all six Notes pages** (blog index, the post, category and tag pages) share
+  the condensed set: `--cream`, `--bone`, `--ink`, `--head`, `--muted`, `--green`, `--teal`,
+  `--teal-dark`, `--gold`, `--coral`, `--link`, `--shadow-m`, `--spring`. No `--maxw` or
+  `--gutter`.
 
-So a token change that should apply site-wide is a three-file change, and you must check which
+So a token change that should apply site-wide is a ten-file change, and you must check which
 tokens each file actually declares before assuming one exists there.
+
+The Google Fonts link also comes in two versions. index.html, coffee.html and thanks.html load
+Fraunces and Karla with italics; privacy.html and the Notes pages load them without. Keep each
+file on the version it already uses unless the change is meant to add italics.
 
 ---
 
 ## Shared values, and everywhere they live
 
-**Phone number.** `07775 562102` displayed, `tel:+447775562102` in links. Four occurrences:
-two in index.html (the contact section and the coffee modal), one in privacy.html as body text
-("ring 07775 562102"), one in thanks.html. Search both forms separately.
+**Phone number.** There isn't one. It was removed from every page on 4 September 2026
+(commit `798fff9`, "Drop the phone number"). Do not add one back unless Petro asks. If she
+does, it needs adding to the contact section in index.html and checking against the privacy
+notice, which mentions people ringing.
 
 **Email address.** Never write `petro@wallmedia.co.uk` into the source. It is deliberately
 assembled in JavaScript at runtime so scrapers cannot read it, and that protection must
-survive any edit. Two different patterns are in use:
+survive any edit. It now lives in **index.html only**:
 
-- index.html and thanks.html: `var user = ['pe','tro'], host = ['wallmedia','co','uk'];`
-- privacy.html: `var u=['petro'], d=['wallmedia','co','uk'];`
+- `var user = ['pe','tro'], host = ['wallmedia','co','uk'];` joined with
+  `String.fromCharCode(64)` for the @, and `mailto:` itself built from char codes.
 
-Both join with `String.fromCharCode(64)` for the @. A search for `['pe','tro']` finds two of
-the three files and silently misses privacy.html.
+The "Email me" buttons (`data-mail`) open the enquiry form rather than a bare mailto; the
+assembled address is only used as the fallback when the form cannot send. Every other page
+links to `./#enquiry` ("Send a message") instead of carrying its own copy of the script.
+Search for `fromCharCode(64)` to confirm this is still the only place.
 
-**Legal footer.** Appears in all three files and must be reproduced word for word:
+**Legal footer.** Appears on all ten pages and must be reproduced word for word:
 
 > Off The Wall Digital, a trading name of Wall Media Ltd. Registered in England and Wales,
 > company number 15045668. Registered office: Longfrey Cottage, Dorking Road, Chilworth,
 > Surrey, GU4 8RH.
 
 Company number and registered office also appear twice in privacy.html's own body text, in the
-"Who we are" and "Who runs this site" sections. Five occurrences of each in total across the
+"Who we are" and "Who runs this site" sections. Twelve occurrences of each in total across the
 repo. Do not split, shorten or paraphrase any of it.
 
-**Header and footer markup** is duplicated across all three files and the structures differ.
-index.html has the full sticky nav with a mobile hamburger; privacy.html and thanks.html have
-their own simpler topbars. Never copy index.html's header structure into the other two.
+**Header and footer markup** is duplicated on every page and the structures differ.
+index.html has the full sticky nav with a mobile hamburger; every other page (coffee, thanks,
+privacy and all Notes pages) has its own simpler topbar with no hamburger. Never copy
+index.html's header structure into the others.
 
 ---
 
@@ -168,28 +190,33 @@ their own simpler topbars. Never copy index.html's header structure into the oth
 Anything here needs a human. Say plainly that it affects how the site takes bookings or what
 it is legally required to say, pass it on, and never partially do it.
 
-**The booking widget.** The GoHighLevel calendar ID `dqB0NblntdSZnLlpSFEz` appears **ten
-times** in index.html. Five are `href` fallbacks on `data-coffee` links (desktop nav, mobile
-nav, hero, "Is this you", case studies), one is the iframe's `data-src`, one is inside a
-nine-second fallback redirect, and critically **one is part of an element ID**:
-`dqB0NblntdSZnLlpSFEz_1788453583961`. A find-and-replace on the URL will miss the element ID
-and break the widget.
+**The booking page.** Booking no longer happens in a popup on index.html. Every coffee call to
+action is a plain link to the booking page: `./coffee.html` from the root pages (five in
+index.html: desktop nav, mobile nav, hero, "Is this you", case studies) and `/coffee` from
+Notes. Do not point a coffee CTA straight at the external calendar.
 
-**The `.cal` iframe CSS overrides.** A stack of `!important` rules (position, left, top,
-opacity, visibility, pointer-events, overflow) exists specifically to counteract what
-GoHighLevel's `form_embed.js` does to the iframe after it measures height. Remove or rewrite
-them and the calendar loads invisibly, which looks like nothing is wrong. The README says the
-same thing.
+**The booking widget ID.** The GoHighLevel calendar ID `dqB0NblntdSZnLlpSFEz` appears **five
+times, all in coffee.html**: the iframe's `data-src`, the `<noscript>` fallback link, the
+`getElementById` call, the nine-second fallback redirect, and critically **as part of the
+iframe's element ID**: `dqB0NblntdSZnLlpSFEz_1788453583961`. A find-and-replace on the URL
+will miss the element ID and break the widget.
+
+**The `.cal` iframe CSS overrides** in coffee.html. A stack of `!important` rules (position,
+left, top, opacity, visibility, pointer-events, overflow) exists specifically to counteract
+what GoHighLevel's `form_embed.js` does to the iframe after it measures height. Remove or
+rewrite them and the calendar loads invisibly, which looks like nothing is wrong. The README
+says the same thing.
+
+**The `form_embed.js` URL** (`https://link.msgsndr.com/js/form_embed.js`), loaded by the
+script at the bottom of coffee.html.
 
 **The enquiry webhook.** `ENQUIRY_WEBHOOK` near the top of index.html's script block, pointing
 at a GoHighLevel hook. Setting it to an empty string is the documented way to fall back to a
 prefilled mailto, but changing it otherwise breaks enquiry delivery silently.
 
-**`EMBED_SRC`**, the GoHighLevel `form_embed.js` URL.
+**The email assembly JavaScript** in index.html. See above.
 
-**The email assembly JavaScript**, in all three files. See above.
-
-**The legal footer text**, in all three files.
+**The legal footer text**, on every page.
 
 **`noindex,nofollow` on thanks.html.** It is the calendar's redirect target and must stay out
 of search.
@@ -198,17 +225,13 @@ of search.
 another 80, plus browser chrome on every case study card. Copy near them can be edited; SVG
 attributes must not be touched or the artwork corrupts.
 
-**`data-coffee` attributes.** Every booking CTA carries one, and JavaScript intercepts clicks
-on `[data-coffee]` to open the modal. A new booking CTA without the attribute will jump
-straight to the external calendar instead of opening the popup.
-
-**`[hidden]{display:none!important}`.** Declared in all three files. Do not add the `hidden`
-attribute to anything you intend to be visible.
+**`[hidden]{display:none!important}`.** Declared in index.html, coffee.html, privacy.html and
+thanks.html. Do not add the `hidden` attribute to anything you intend to be visible.
 
 There is **no analytics, no tracking pixel and no cookie consent logic** on this site, and
-none should be added without Petro asking. The only localStorage use is a one-line
-availability test deciding whether the booking modal can open. The privacy policy states that
-nothing is stored on the visitor's device, so adding tracking would make that page untrue.
+none should be added without Petro asking. Nothing uses localStorage or cookies. The privacy
+policy states that nothing is stored on the visitor's device, so adding tracking would make
+that page untrue.
 
 ---
 
@@ -238,20 +261,26 @@ is her shopfront.
 
 ## Change recipes
 
-**Change a phone number.** Search both the spaced display form and the `tel:` form. Four
-places across three files. Check the coffee modal in index.html, it is easy to miss.
+**Add a phone number back.** Only if Petro asks. See Shared values above: it was removed on
+4 September 2026, so there is nothing to find and replace.
 
-**Change a colour or spacing token.** Three files, and check which tokens each one actually
-declares before editing. Remember thanks.html deliberately differs on `--maxw` and `--gutter`.
+**Change a colour or spacing token.** Up to ten files, and check which tokens each one
+actually declares before editing (see the token blocks above). Remember thanks.html
+deliberately differs on `--maxw` and `--gutter`.
+
+**Add or replace an image.** Save it into `assets/img/` (or `assets/blog/` for Notes), never
+hotlink it from another host. Keep it around 1600px wide at most and compress it; the site has
+no build step to do that for you. Reference it by root-absolute path.
 
 **Edit copy in a section with an illustration.** Change the text nodes only. Leave every SVG
 attribute alone.
 
-**Add a booking CTA.** Copy an existing one including its `data-coffee` attribute and its
-`href` fallback to the calendar URL. Without the attribute it bypasses the popup.
+**Add a booking CTA.** Copy an existing one. It is a plain link to the booking page:
+`./coffee.html` from a root page, `/coffee` from Notes. Use coffee wording from the copy rules.
 
 **Add a page.** No template exists, so the new page needs the head boilerplate, a `:root`
-block, its own header and footer, and the email assembly script if it shows an email. Match
+block, its own header and footer with the legal text, and a "Send a message" link to
+`./#enquiry` rather than its own copy of the email script. Match
 privacy.html's simpler structure rather than index.html's. Vercel serves a new .html file at
 its clean URL with no config change. Update the nav in whichever files carry links.
 
@@ -336,8 +365,21 @@ thumbnail layout and 24px margin between cards.
 
 ## Known weaknesses, for us rather than the agent
 
-Recorded so they get fixed rather than rediscovered. The booking widget ID should be a single
-constant at the top of the script block the way `ENQUIRY_WEBHOOK` already is, which would turn
-ten scattered occurrences into one. The three `:root` blocks want a single source. The seven
-external images should live in the repo. And the email assembly pattern should be made
-identical across the three files so one search finds all of them.
+Recorded so they get fixed rather than rediscovered.
+
+- **No shared stylesheet.** Ten `:root` blocks, ten style blocks and two Google Fonts links
+  want a single `assets/site.css`. This is the biggest one.
+- The booking widget ID should be a single constant at the top of coffee.html's script block
+  the way `ENQUIRY_WEBHOOK` is in index.html, which would turn five occurrences into one.
+- No `robots.txt`, so nothing points crawlers at the sitemap.
+- No `404.html`, so a mistyped URL shows Vercel's default error page.
+- No social share image on privacy.html, thanks.html, or the Notes listing, category and tag
+  pages.
+- No logo or icon files. The favicon is an inline SVG data URI in every page, and there is no
+  Apple touch icon.
+- privacy.html section 07 says "Ask us using the email button below", but that page has no
+  email button, only the "Send a message" footer link. This is copy on the legal page, so it
+  needs Petro's wording.
+
+Fixed on 29 September 2026: the external images now live in the repo, and the email assembly
+exists in one file only.

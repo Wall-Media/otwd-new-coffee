@@ -2,7 +2,7 @@
 
 Marketing site for Off The Wall Digital (Petro Wall, Ramsgate, Kent), a trading name of
 Wall Media Ltd. Self-contained static HTML, no build step, no dependencies to install.
-Open any of the files in a browser and it works.
+Serve the folder over HTTP and it works.
 
 ## Files
 
@@ -20,10 +20,9 @@ Open any of the files in a browser and it works.
 
 ## Opening it
 
-No server needed for a first look, just double click `index.html`.
-
-For anything involving the calendar or the enquiry form, serve it over HTTP instead,
-because both rely on browser storage and a cross-origin request:
+Serve it over HTTP. Double clicking a file will show the words but not the images, because
+images use root-absolute paths (`/assets/...`), and the calendar and enquiry form need a real
+origin too:
 
 ```
 python3 -m http.server 8000
@@ -35,9 +34,8 @@ python3 -m http.server 8000
 All files sit at the repo root, so any static host works. On GitHub Pages, serve from
 `main` / root and `index.html` is picked up automatically. Vercel uses `vercel.json` with `cleanUrls: true` so paths without `.html` resolve.
 
-Booking happens in a popup, so there is no separate booking page. The coffee links carry
-the calendar URL as their `href`, which only comes into play when scripts are off or
-browser storage is blocked. Nothing needs editing for deployment.
+Booking happens on its own page, `coffee.html` (served at `/coffee`). Every coffee call to
+action is a plain link to it. Nothing needs editing for deployment.
 
 Set `thanks.html` as the calendar's redirect URL in GoHighLevel so people land somewhere
 of ours after booking rather than on a LeadConnector confirmation screen.
@@ -47,12 +45,8 @@ of ours after booking rather than on a LeadConnector confirmation screen.
 **Booking calendar.** LeadConnector widget `dqB0NblntdSZnLlpSFEz` ("Coffee with Petro",
 30 min), resized by `https://link.msgsndr.com/js/form_embed.js`.
 
-The widget needs browser storage. The site checks for it before deciding what to do:
-
-- storage available (a normal domain) → the calendar opens embedded in the coffee popup
-- storage blocked (sandboxed preview hosts) → the popup is skipped and the coffee links
-  behave as ordinary links straight to the calendar
-- JavaScript off → same, the `href` does the work
+The widget is embedded in `coffee.html`. With JavaScript off, a `<noscript>` link opens
+the calendar directly instead.
 
 `form_embed.js` parks the iframe off screen to measure its content height and does not
 restore it, so `.cal` reclaims `position`, `opacity`, `visibility` and `pointer-events`
@@ -60,13 +54,10 @@ with `!important` while leaving the height the script calculates alone. Do not r
 those overrides or the calendar will load invisibly.
 
 There is a nine second safety net that redirects to the calendar if the widget never
-renders at all. It is guarded on the modal still being open, and cleared both on iframe
-load and on modal close. Those guards matter: a closed modal is `display:none`, so the
-iframe measures zero height, and without them the timer fires and navigates away from
-whatever the visitor moved on to.
+renders at all (the iframe is still under 260px tall after nine seconds).
 
 **Enquiry form.** Posts JSON to a GoHighLevel inbound webhook. The URL is the
-`ENQUIRY_WEBHOOK` constant near the top of the script block. Payload:
+`ENQUIRY_WEBHOOK` constant near the top of the script block in `index.html`. Payload:
 
 ```json
 {
@@ -96,19 +87,25 @@ pre-filled with everything they typed, so an enquiry is never lost silently. Set
 - **No urgency, scarcity or countdowns.** No invented statistics or testimonials.
 - **Petro's former employers are never named**; her background stays generalised.
 - **Email addresses never appear in the source.** The address is assembled in JavaScript
-  at runtime and sits behind a labelled button, with a no-script note pointing at the
-  phone number.
+  at runtime in `index.html` only, and used as the fallback when the enquiry form cannot
+  send. Other pages link to `./#enquiry` rather than carry their own copy. There is no
+  phone number on the site.
 - **Cream palette only, never dark, and no light/dark toggle.** Tokens live in `:root`.
 - **SVG line art, never emoji.**
 - Calls to action are coffee invitations that warm up down the page: "Fancy a coffee?",
   "Start with a coffee", "That sounds like me", "Tell me about yours", "Put the kettle on".
 
-## Images are still hosted externally
+## Images
 
-The seven images (`hero-open`, `hero-shut`, the four case study screenshots and Petro's
-portrait) are still served from `pub.hyperagent.com`. They work, but they are an external
-dependency the site should not have. Download them into an `assets/` folder and repoint
-the `src` attributes before this goes anywhere permanent.
+Every image lives in the repo. Nothing is hotlinked from another host.
+
+- `assets/img/` holds the marketing images: `hero-shut.jpg` and `hero-open.jpg` (the hero
+  before and after slider), `case-mamas.jpg`, `case-ocean.jpg`, `case-boiler.jpg`,
+  `case-ignite.jpg` (case study screenshots) and `share-shopfront.jpg` (social share image).
+- `assets/blog/` holds Petro's portrait `petro.jpg` (used on the home page and on every
+  note's author card) and each note's featured image.
+
+Keep new images around 1600px wide at most and compressed, since there is no build step.
 
 ## Blog structure
 
@@ -116,7 +113,7 @@ The Notes section (`/blog/`) is a static HTML blog. No build step, no CMS, no Ma
 
 **Adding a note:**
 
-1. Create `blog/<slug>.html` following the pattern in `why-your-website-should-feel-like-you.html`
+1. Create `blog/<slug>.html` following the pattern in `your-website-should-feel-like-meeting-you.html`
 2. Set unique title, meta description, canonical URL
 3. For drafts: use `<meta name="robots" content="noindex,nofollow">` and show the Draft label
 4. For published: use `<meta name="robots" content="index,follow">` and remove the Draft label
