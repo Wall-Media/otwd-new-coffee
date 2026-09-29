@@ -389,8 +389,12 @@ Recorded so they get fixed rather than rediscovered.
 - Two versions of the Google Fonts link (with and without italics) are still in use.
 - The booking widget ID should be a single constant at the top of coffee.html's script block
   the way `ENQUIRY_WEBHOOK` is in index.html, which would turn five occurrences into one.
-- No logo or icon files. The favicon is an inline SVG data URI in every page, and there is no
-  Apple touch icon.
+- **No logo yet.** One will be designed as an SVG later. Until then the "crooked frame" mark
+  stands in, and it is not a finished logo. It lives in two places on every one of the 11 pages:
+  the inline `<svg>` inside the header's `.brand` link (search `rotate(-9 18 21)`), and the
+  favicon, a URL-encoded SVG data URI in `<link rel="icon">`. When the logo arrives, save it as
+  `assets/img/logo.svg`, point the favicon at `/assets/img/logo.svg` on every page, replace the
+  header mark on every page, and add an Apple touch icon (a 180px PNG) at the same time.
 
 Fixed on 29 September 2026: the external images now live in the repo, the email assembly
 exists in one file only, robots.txt and a branded 404.html exist, every page has a social share
