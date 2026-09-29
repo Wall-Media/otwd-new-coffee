@@ -29,6 +29,7 @@ import html
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 
@@ -133,6 +134,7 @@ def load_post(rel):
     if not alt:
         raise BuildError('%s has no <img class="post-hero-img" alt="..."> for the card thumbnail' % rel)
     published = datetime.datetime.fromisoformat(ld['datePublished'])
+    check_post(rel, src, ld, published)
     return {
         'file': rel,
         'slug': os.path.basename(rel)[:-5],
@@ -141,12 +143,85 @@ def load_post(rel):
         'published': published,
         'category': ld['articleSection'],
         'tags': list(ld['keywords']),
-        'thumb': ld['image'].replace(SITE, ''),
+        'image': ld['image'].replace(SITE, ''),
+        'thumb': thumb_path(ld['image']),
         'alt': html.unescape(alt.group(1)),
         'read': strip_tags(read_time.group(1)),
         'blurb': blurb,
         'draft': bool(robots and 'noindex' in robots.group(1)),
     }
+
+
+def check_post(rel, src, ld, published):
+    """The post's visible header is hand-written; stop if it disagrees with its JSON-LD."""
+    slug = os.path.basename(rel)[:-5]
+    problems = []
+
+    def first(pattern):
+        m = re.search(pattern, src, re.S)
+        return m.groups() if m else None
+
+    h1 = first(r'<h1>(.*?)</h1>')
+    if not h1 or strip_tags(h1[0]) != ld['headline']:
+        problems.append('<h1> should be "%s"' % ld['headline'])
+    cat = first(r'<a class="meta__cat" href="([^"]*)">(.*?)</a>')
+    want_cat = '/blog/category/' + slugify(ld['articleSection'])
+    if not cat or cat[0] != want_cat or strip_tags(cat[1]) != ld['articleSection']:
+        problems.append('the category link should be <a class="meta__cat" href="%s">%s</a>' % (want_cat, ld['articleSection']))
+    date = first(r'<span class="meta__date">(.*?)</span>')
+    want_date = published.strftime('%-d %B %Y')
+    if not date or strip_tags(date[0]) != want_date:
+        problems.append('the date should read "%s" (from datePublished)' % want_date)
+    tags_div = first(r'<div class="tags">(.*?)</div>')
+    have = re.findall(r'<a class="tag" href="/blog/tag/([^"]*)">#([^<]*)</a>', tags_div[0]) if tags_div else []
+    want = [slugify(k) for k in ld['keywords']]
+    if [h for h, _ in have] != want or any(h != label for h, label in have):
+        problems.append('the tag links should be, in order: %s' % ', '.join(
+            '<a class="tag" href="/blog/tag/%s">#%s</a>' % (t, t) for t in want))
+    for label, pattern in (('canonical', r'<link rel="canonical" href="([^"]*)"'),
+                           ('og:url', r'<meta property="og:url" content="([^"]*)"')):
+        got = first(pattern)
+        if not got or got[0] != '%s/blog/%s' % (SITE, slug):
+            problems.append('%s should be %s/blog/%s' % (label, SITE, slug))
+    for label, pattern in (('og:image', r'<meta property="og:image" content="([^"]*)"'),
+                           ('twitter:image', r'<meta name="twitter:image" content="([^"]*)"')):
+        got = first(pattern)
+        if not got or got[0] != ld['image']:
+            problems.append('%s should match the JSON-LD image, %s' % (label, ld['image']))
+    hero = first(r'<img\b[^>]*class="post-hero-img"[^>]*src="([^"]*)"')
+    if not hero or hero[0] != ld['image'].replace(SITE, ''):
+        problems.append('the hero image src should be %s' % ld['image'].replace(SITE, ''))
+    if not os.path.exists(os.path.join(ROOT, ld['image'].replace(SITE, '').lstrip('/'))):
+        problems.append('the image %s does not exist' % ld['image'].replace(SITE, ''))
+    if problems:
+        raise BuildError('%s does not match its own JSON-LD:\n  - %s' % (rel, '\n  - '.join(problems)))
+
+
+def thumb_path(image_url):
+    """Cards use a small copy of the post image: /assets/blog/<name>-thumb.jpg."""
+    return os.path.splitext(image_url.replace(SITE, ''))[0] + '-thumb.jpg'
+
+
+THUMB_W, THUMB_H, THUMB_QUALITY = 720, 480, 68
+
+
+def ensure_thumb(p, check):
+    """Create a missing card thumbnail with macOS sips: centre crop to 720x480."""
+    dest = os.path.join(ROOT, p['thumb'].lstrip('/'))
+    if os.path.exists(dest):
+        return False
+    how = 'Run python3 build.py on a Mac to create it, or save a %dx%d JPEG there yourself.' % (THUMB_W, THUMB_H)
+    if check or not shutil.which('sips'):
+        raise BuildError('%s needs a card thumbnail at %s. %s' % (p['file'], p['thumb'], how))
+    src = os.path.join(ROOT, p['image'].lstrip('/'))
+    dims = subprocess.run(['sips', '-g', 'pixelWidth', '-g', 'pixelHeight', src],
+                          capture_output=True, text=True, check=True).stdout
+    w, h = [int(x) for x in re.findall(r'pixel\w+: (\d+)', dims)]
+    fit = ['--resampleHeight', str(THUMB_H)] if w * THUMB_H >= h * THUMB_W else ['--resampleWidth', str(THUMB_W)]
+    run = lambda *a: subprocess.run(['sips'] + list(a), capture_output=True, check=True)
+    run('-s', 'format', 'jpeg', *fit, src, '--out', dest)
+    run('--cropToHeightWidth', str(THUMB_H), str(THUMB_W), '-s', 'formatOptions', str(THUMB_QUALITY), dest)
+    return True
 
 
 def load_posts():
@@ -302,8 +377,11 @@ def build_sitemap(ctx, pending):
 
 # ---------------------------------------------------------------- main
 
-def build():
+def build(check=False):
     posts = load_posts()
+    for p in posts:
+        if ensure_thumb(p, check):
+            print('created ' + p['thumb'])
     cats_file = json.loads(read('blog/categories.json'))
     categories, tags = {}, {}
     for p in posts:
@@ -357,8 +435,8 @@ def build():
 def main():
     check = '--check' in sys.argv[1:]
     try:
-        outputs, pending, orphans = build()
-    except (BuildError, ValueError, KeyError) as e:
+        outputs, pending, orphans = build(check)
+    except (BuildError, ValueError, KeyError, subprocess.CalledProcessError) as e:
         print('build.py: %s' % e, file=sys.stderr)
         return 2
     for rel in orphans:

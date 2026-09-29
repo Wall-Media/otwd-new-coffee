@@ -163,7 +163,8 @@ full `https://www.offthewalldigital.com/assets/...` URL in og:image, twitter:ima
 | assets/img/case-mamas.jpg, case-ocean.jpg, case-boiler.jpg, case-ignite.jpg | index.html "Recent projects" cards |
 | assets/img/share-shopfront.jpg | the default social share image: og:image and twitter:image on every page except notes with their own hero image, and 404.html |
 | assets/blog/petro.jpg | index.html About portrait, and the author card on every note |
-| assets/blog/<slug>.png | each note's hero image and listing thumbnail |
+| assets/blog/<slug>.jpg | each note's hero image, about 1400px wide, compressed |
+| assets/blog/<slug>-thumb.jpg | the note's card thumbnail, 720x480. Created by build.py (with macOS `sips`) when missing |
 
 ---
 
@@ -374,15 +375,18 @@ structure. Vercel serves a new .html file at its clean URL with no config change
 **Add a note (blog post).**
 
 1. Copy `blog/your-website-should-feel-like-meeting-you.html` to `blog/<slug>.html`, and put
-   its hero image at `assets/blog/<slug>.png`.
+   its hero image at `assets/blog/<slug>.jpg`: a JPEG about 1400px wide, compressed to roughly
+   300KB. Never a full-size PNG; the first one was 1.6MB. The build makes the card thumbnail.
 2. In the head: unique title, meta description, canonical, og and twitter tags (full
    https://www.offthewalldigital.com URLs for images). `noindex,nofollow` for a draft,
    `index,follow` to publish.
 3. In the JSON-LD: `headline`, `description`, `datePublished`, `dateModified`, `image` (a URL
    string), `articleSection` (the category) and `keywords` (the tags, as written, e.g.
    "brand voice"). The build reads these, so they must be right.
-4. In the page: the hero's category link, date, `meta__read`, tag links and the hero image's
-   `alt`. These are hand-written in the post, so keep them matching the JSON-LD.
+4. In the page: the h1, the hero's category link, date, `meta__read`, tag links and the hero
+   image's `src` and `alt`. These are hand-written in the post; the build checks the h1,
+   category, date, tags, canonical, og:url and image against the JSON-LD and stops, saying
+   exactly what to change, if they disagree.
 5. New category? Add it to `blog/categories.json` (name, heading, intro, description). The
    build stops and tells you if you forget.
 6. Run `python3 build.py`. It adds the card to the listing, category and tag pages, creates any
@@ -393,7 +397,7 @@ structure. Vercel serves a new .html file at its clean URL with no config change
 card uses a horizontal flexbox layout: image on the left (160px × 120px, rounded, with subtle 
 shadow) and text content on the right. On mobile (below 640px) the layout stacks with image 
 above text (full width, 200px height). Image src uses root-absolute paths like 
-`/assets/blog/<slug>.png`. The thumbnail img element appears as the first child inside the 
+`/assets/blog/<slug>-thumb.jpg`. The thumbnail img element appears as the first child inside the 
 `.post-card` link, followed by a `.post-card__content` wrapper containing the existing top, 
 heading, excerpt, and tags structure. The whole card remains one clickable link. See 
 `partials/post-card.html` for the markup; the build writes every card from it.
@@ -405,9 +409,9 @@ the hero div closes but before the article, (3) image styling via `.post-hero-im
 760px to match article column and other post content, max-height 480px with object-fit cover,
 border-radius 16px, subtle shadow (0 8px 24px -12px rgba(47,51,39,.18)), margin-top
 clamp(32px,5vw,48px). The image lives inside the content wrap, not full viewport width. Store
-hero images in `assets/blog/` as PNG or JPG. Use relative path `../assets/blog/<slug>.png` in
-the img src. Use full absolute URL
-`https://www.offthewalldigital.com/assets/blog/<slug>.png` in og:image, twitter:image, and
+hero images in `assets/blog/` as a compressed JPEG. Use the root-absolute path
+`/assets/blog/<slug>.jpg` in the img src, with the image's real width and height. Use the full
+URL `https://www.offthewalldigital.com/assets/blog/<slug>.jpg` in og:image, twitter:image, and
 JSON-LD image. Loading attribute should be "eager" for hero images. Include descriptive alt
 text.
 
@@ -468,8 +472,7 @@ thumbnail layout and 24px margin between cards.
 
 Recorded so they get fixed rather than rediscovered.
 
-- A post's own hero (category link, tag links, date, read time) is hand-written and is not
-  checked against its JSON-LD. Keep them matching when you edit a post.
+- A post's read time (`meta__read`) is hand-written and not checked.
 - JSON-LD `dateModified` is set by hand.
 - **No logo yet.** One will be designed as an SVG later. Until then the "crooked frame" mark
   stands in, and it is not a finished logo. It lives in `partials/mark.html` (the header mark,
@@ -488,4 +491,7 @@ every element of every page at four widths showing no visual change, and the unu
 links point at clean URLs. The booking calendar ID is a single `CAL_ID` constant (plus the
 `<noscript>` link) instead of five scattered copies. Headers, footers, the legal line, fonts
 and the tab icon are shared partials kept in step by build.py, and the Notes listings, category
-and tag pages, RSS and sitemap (now with `lastmod`) are generated from the posts.
+and tag pages, RSS and sitemap (now with `lastmod`) are generated from the posts. The build
+checks each post's visible header against its JSON-LD, and cards use a 720x480 thumbnail
+(95KB) instead of the full hero image (the first post's was a 1.6MB PNG, now a 285KB JPEG).
+The home page's "Skip to content" link now appears when a keyboard user tabs to it.

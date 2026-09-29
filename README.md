@@ -137,9 +137,10 @@ The Notes section (`/blog`) is static HTML. Posts are hand-written HTML files in
 everything that lists them is generated.
 
 **Adding a note:** copy an existing post to `blog/<slug>.html`, add its image at
-`assets/blog/<slug>.png`, set its details (the JSON-LD headline, description, dates, category,
+`assets/blog/<slug>.jpg` (a compressed JPEG about 1400px wide), set its details (the JSON-LD headline, description, dates, category,
 tags and image, plus the matching hero), and run `python3 build.py`. The build adds the card
-everywhere, creates any new category or tag page, and updates RSS and the sitemap. A new
+everywhere, makes its card thumbnail, creates any new category or tag page, and updates RSS
+and the sitemap. It also stops if the post's visible header disagrees with its details. A new
 category needs its wording in `blog/categories.json` first; the build tells you if it is
 missing.
 
