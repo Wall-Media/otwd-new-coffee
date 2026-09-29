@@ -159,7 +159,7 @@ full `https://www.offthewalldigital.com/assets/...` URL in og:image, twitter:ima
 | File | Used by |
 |---|---|
 | assets/img/hero-shut.jpg | index.html hero, "before" side of the slider |
-| assets/img/hero-open.jpg | index.html hero, "after" side of the slider (resized to 1600px to match) |
+| assets/img/hero-open.jpg | index.html hero, "after" side of the slider |
 | assets/img/case-mamas.jpg, case-ocean.jpg, case-boiler.jpg, case-ignite.jpg | index.html "Recent projects" cards |
 | assets/img/share-shopfront.jpg | the default social share image: og:image and twitter:image on every page except notes with their own hero image, and 404.html |
 | assets/blog/petro.jpg | index.html About portrait, and the author card on every note |
@@ -337,6 +337,9 @@ is her shopfront.
   kettle on" at the close. Never "Book a call" or "Have a chat". Because coffee implies
   meeting and Petro is Ramsgate based, the contact copy stays honest: a coffee if you are
   local, a phone call if you are not.
+- One deliberate exception: the privacy notice keeps "If you email us or book a call". It is a
+  description in a legal notice, not a call to action, and Colin chose on 29 September 2026 to
+  leave it as "book a call". Do not change it to "book a coffee".
 
 ---
 
@@ -349,8 +352,11 @@ is her shopfront.
 and 404.html deliberately override `--maxw` and `--gutter`.
 
 **Add or replace an image.** Save it into `assets/img/` (or `assets/blog/` for Notes), never
-hotlink it from another host. Keep it around 1600px wide at most and compress it; the site has
-no build step to do that for you. Reference it by root-absolute path.
+hotlink it from another host. Size it to about twice the widest it ever displays (the hero
+slider tops out at 657px, so 1400px; project screenshots at 625px, so 1600px keeps text crisp)
+and compress it. macOS `sips` is a poor JPEG encoder and often makes files bigger; ffmpeg does
+well: `ffmpeg -i in.jpg -vf scale=1400:-2 -q:v 4 out.jpg`. Give every `<img>` its real
+`width` and `height`. Reference it by root-absolute path.
 
 **Edit copy in a section with an illustration.** Change the text nodes only. Leave every SVG
 attribute alone.
