@@ -200,9 +200,8 @@ Anything here needs a human. Say plainly that it affects how the site takes book
 it is legally required to say, pass it on, and never partially do it.
 
 **The booking page.** Booking no longer happens in a popup on index.html. Every coffee call to
-action is a plain link to the booking page: `./coffee.html` from the root pages (five in
-index.html: desktop nav, mobile nav, hero, "Is this you", case studies) and `/coffee` from
-Notes. Do not point a coffee CTA straight at the external calendar.
+action is a plain link to the booking page, `/coffee` (five in index.html: desktop nav, mobile
+nav, hero, "Is this you", case studies, plus two in the first note). Do not point a coffee CTA straight at the external calendar.
 
 **The booking widget ID.** The GoHighLevel calendar ID `dqB0NblntdSZnLlpSFEz` appears **five
 times, all in coffee.html**: the iframe's `data-src`, the `<noscript>` fallback link, the
@@ -289,8 +288,7 @@ og:title, og:description, og:url, og:image and the matching twitter tags with
 slash (`/coffee`, `/blog`), because Vercel redirects the other forms. Use
 `share-shopfront.jpg` as og:image unless the page has its own hero image.
 
-**Add a booking CTA.** Copy an existing one. It is a plain link to the booking page:
-`./coffee.html` from a root page, `/coffee` from Notes. Use coffee wording from the copy rules.
+**Add a booking CTA.** Copy an existing one. It is a plain link to the booking page, `/coffee`. Use coffee wording from the copy rules.
 
 **Add a page.** Copy 404.html as the template: it links site.css and page.css, has the
 simple header and the legal footer, and uses root-absolute links. Add only what is unique to the
@@ -352,6 +350,10 @@ or tag pages to sitemap.xml. Update category/tag lists on existing posts as need
 not relative paths (`./category/websites.html`, `./<slug>.html`). With `trailingSlash: false`, 
 `/blog/index.html` is served at `/blog` (no trailing slash), so `./` relative links resolve 
 against `/` (parent of last segment), not `/blog/`, causing 404s.
+
+**Internal links use clean URLs.** Link to `/coffee`, `/privacy`, `/privacy#terms`, `/blog`,
+never `coffee.html`, `privacy.html` or `/blog/`. Vercel answers those with a 308 redirect, so
+every click on them costs an extra round trip. `./`, `/` and `./#enquiry` are fine as they are.
 
 **Notes listing spacing.** All Notes listing pages (blog index, category, and tag pages) follow
 the same tighter spacing standard to avoid large empty cream voids between sections. These
