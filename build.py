@@ -304,16 +304,6 @@ def page_from_template(kind, params, ctx, where):
 
 # ---------------------------------------------------------------- git dates
 
-# Commits that do not count towards any page's lastmod: site-wide head or footer edits that
-# change nothing a visitor reads. Full hashes, as they are on main.
-LASTMOD_SKIP = {
-    # GA4 consent block and Cookie settings link. Its privacy.html wording changes are dated
-    # by the GA4 QA fixes commit that follows it.
-    'e7ce7c37ba1cc054b797857a6b0744353e6899d3',  # local box commit
-    '0fdddca7e5ee689c7ed81967c174c47a031662cd',  # same tree, as pushed to PR #13
-}
-
-
 def lastmod(rel, pending):
     """Last commit date of a file, or today if it is about to change or has uncommitted edits."""
     today = datetime.date.today().isoformat()
@@ -324,12 +314,9 @@ def lastmod(rel, pending):
                                capture_output=True, text=True, check=True).stdout.strip()
         if dirty:
             return today
-        log = subprocess.run(['git', 'log', '--format=%H %cs', '--', rel], cwd=ROOT,
-                             capture_output=True, text=True, check=True).stdout.split('\n')
-        for line in log:
-            if line and line.split()[0] not in LASTMOD_SKIP:
-                return line.split()[1]
-        return today
+        date = subprocess.run(['git', 'log', '-1', '--format=%cs', '--', rel], cwd=ROOT,
+                              capture_output=True, text=True, check=True).stdout.strip()
+        return date or today
     except (OSError, subprocess.CalledProcessError):
         return today
 
