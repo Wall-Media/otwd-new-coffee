@@ -519,8 +519,8 @@ Recorded so they get fixed rather than rediscovered.
   make it optional or remove it in the calendar's form settings, then a test booking is rerun.
   The calendar also takes bookings more than a year ahead; Petro may want a booking window.
 - JSON-LD `dateModified` is set by hand.
-- **Google Business Profile URL missing from `sameAs`** in index.html's LocalBusiness JSON-LD.
-  Add it once the profile URL is confirmed, and remove the TODO comment above the script.
+- **Google Business Profile** included in index.html's LocalBusiness JSON-LD `sameAs`
+  (https://www.google.com/maps?cid=15528237416962479881), alongside Facebook.
 - **No logo yet.** One will be designed as an SVG later. Until then the "crooked frame" mark
   stands in, and it is not a finished logo. It lives in `partials/mark.html` (the header mark,
   sized per page by its `size` attribute) and `partials/favicon.html` (a URL-encoded SVG data
