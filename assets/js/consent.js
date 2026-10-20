@@ -50,6 +50,14 @@ var OTWD_CONSENT_WORDING = {
     var s = document.createElement('script');
     s.async = true;
     s.src = 'https://www.googletagmanager.com/gtag/js?id=' + MEASUREMENT_ID;
+    /* The choice may have gone (another tab cleared storage or rejected) while gtag.js was
+       still loading. The queued config runs as soon as it arrives, so stop the tag and clear
+       its cookies now, then again once that queued config has been processed. */
+    s.onload = function(){
+      if (granted()) return;
+      stopAnalytics();
+      setTimeout(clearGaCookies, 0);
+    };
     document.head.appendChild(s);
     gtag('js', new Date());
     gtag('config', MEASUREMENT_ID, pageFields());
@@ -159,8 +167,9 @@ var OTWD_CONSENT_WORDING = {
   else ready();
 
   /* A choice made in another tab applies here too. The storage event fires only in the other
-     tabs, never the one that wrote the value. A null key means storage was cleared, which
-     leaves no consent, so analytics stops if it was running. */
+     tabs, never the one that wrote the value. A null key means storage was cleared, so the
+     choice is read again either way. If it has gone (cleared or removed), analytics stops if
+     it was running, but nothing is stored, so the banner asks again on the next page. */
   window.addEventListener('storage', function(e){
     if (e.key !== STORE_KEY && e.key !== null) return;
     var c = readChoice();
