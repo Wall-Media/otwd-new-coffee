@@ -150,13 +150,29 @@ footer{border-top:1px solid rgba(47,51,39,.12);padding:30px 0 60px;margin-top:20
 (function(){
   document.getElementById('yr').textContent = new Date().getFullYear();
 
-  /* GoHighLevel redirects here only after a booking is confirmed, so this page load is the
-     lead. Counted once per browser session so a refresh does not count it twice. Sends
-     nothing without analytics consent. */
+  /* GoHighLevel redirects here only after a booking is confirmed, so that visit is the lead.
+     It is told apart from a direct visit or a crawler, which bring neither, by either:
+     the redirect's query carrying one of GoHighLevel's booking or contact fields, or a
+     referrer from the booking widget (LeadConnector) or from /coffee, which has no link here.
+     Only the presence of a field is read; its value never leaves this page, and
+     otwdConsent.lead sends page_location without the query. Counted once per browser session
+     so a refresh does not count it twice. Sends nothing without analytics consent. */
+  var GHL_FIELDS = ['appointment_id', 'contact_id', 'calendar_id', 'email', 'phone',
+                    'first_name', 'last_name', 'full_name'];
+  function fromBooking(){
+    var q = new URLSearchParams(location.search);
+    for (var i = 0; i < GHL_FIELDS.length; i++){ if (q.get(GHL_FIELDS[i])) return true; }
+    try {
+      var r = new URL(document.referrer);
+      if (/(^|\.)(leadconnectorhq\.com|msgsndr\.com)$/.test(r.hostname)) return true;
+      if (r.origin === location.origin && /^\/coffee(\.html)?$/.test(r.pathname)) return true;
+    } catch (e) {}
+    return false;
+  }
   var LEAD_KEY = 'otwd_lead_coffee_booking';
   var counted = false;
   try { counted = sessionStorage.getItem(LEAD_KEY) === '1'; } catch (e) {}
-  if (!counted && window.otwdConsent && window.otwdConsent.lead('coffee_booking')){
+  if (!counted && fromBooking() && window.otwdConsent && window.otwdConsent.lead('coffee_booking')){
     try { sessionStorage.setItem(LEAD_KEY, '1'); } catch (e) {}
   }
 })();

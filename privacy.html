@@ -112,11 +112,12 @@ li{margin-bottom:8px}
       <p>For the purposes of UK data protection law, Wall Media Ltd is the data controller for the personal information described on this page. If you want to talk to us about any of it, use the message link at the bottom of this page.</p>
     </section>
 
+    <!-- DRAFT for Colin: section 02, "nothing is sent to Google Analytics" (the fonts still load from Google) and three places, not two. -->
     <section class="blk"><h2><em>02</em>What this website collects</h2>
-      <p>This website uses Google Analytics to count visits and see which pages are read, but only if you choose Accept in the cookie banner. If you reject it, or make no choice, Google Analytics is not loaded and nothing is sent to Google.</p>
+      <p>This website uses Google Analytics to count visits and see which pages are read, but only if you choose Accept in the cookie banner. If you reject it, or make no choice, Google Analytics is not loaded and nothing is sent to Google Analytics.</p>
       <p>If you accept, Google receives details of your visit, such as the pages you view, your browser and a rough location, and sets cookies named _ga and _ga_ followed by an ID. Those cookies last up to two years. We do not use analytics for advertising, and we do not use it to identify you.</p>
       <p>We keep your cookie choice in your browser's local storage so we do not ask on every page. You can change it at any time with the Cookie settings link at the bottom of every page. If you change to Reject, the analytics cookies are deleted. There are no advertising trackers on this site.</p>
-      <p>There are two places where information can pass from this site to a third party, and both only happen if you choose to use them. The enquiry form sends what you type to our customer records system so that Petro can reply. The booking calendar is embedded from our scheduling provider and loads only when you open it; like most booking tools it uses your browser's local storage to work, and it will show times in your own time zone, which it reads from your browser.</p>
+      <p>There are three places where information can pass from this site to a third party, and all three only happen if you choose to use them. Google Analytics runs only if you accept it, as described above. The enquiry form sends what you type to our customer records system so that Petro can reply. The booking calendar is embedded from our scheduling provider and loads only when you open it; like most booking tools it uses your browser's local storage to work, and it will show times in your own time zone, which it reads from your browser.</p>
       <p>Like almost every website, the hosting provider that serves these pages keeps standard server logs, which can include your IP address, browser type and the pages requested. Those logs exist so the hosting can be kept secure and working. We do not use them to identify individual visitors.</p>
       <p>Some pages link out to other websites, including our clients' sites. Once you follow a link you are on someone else's website and their privacy notice applies, not ours.</p>
     </section>
@@ -139,13 +140,23 @@ li{margin-bottom:8px}
 
     <section class="blk"><h2><em>05</em>Who else sees it</h2>
       <p>We use a small number of third party providers to run the business, for example email, file storage, accounting software and the platforms we build client systems on. Those providers process information on our instructions and are bound to keep it secure.</p>
-      <p>The providers that handle information from this website are our customer records and scheduling platform, which receives enquiry form submissions and booking details, our website hosting provider, which serves these pages, and Google, which runs Google Analytics if you accept it.</p>
+      <!-- DRAFT for Colin: providers list with Google as processor, and the Google Analytics transfer paragraph. -->
+      <p>The providers that handle information from this website are:</p>
+      <ul>
+        <li><strong>Our customer records and scheduling platform</strong>, which receives enquiry form submissions and booking details.</li>
+        <li><strong>Our website hosting provider</strong>, which serves these pages.</li>
+        <li><strong>Google, for Google Analytics</strong> (Google Ireland Ltd and Google LLC), which receives details of your visit only if you accept analytics. Google acts as our service provider (processor) for this and uses the data on our instructions.</li>
+      </ul>
       <p>Where a provider stores information outside the UK, we rely on the safeguards permitted under UK data protection law, such as the International Data Transfer Agreement or an adequacy decision.</p>
+      <p>Google Analytics data may be processed in the United States. For that transfer we rely on the UK Extension to the EU-US Data Privacy Framework (the UK-US data bridge) and on Google's standard contractual clauses.</p>
       <p>Beyond that, we only share personal information where we are legally required to.</p>
     </section>
 
     <section class="blk"><h2><em>06</em>How long we keep it</h2>
       <p>Enquiries that do not turn into work are deleted within two years. Client records are kept for the duration of the engagement and then for six years after the end of the relevant financial year, which is what HMRC requires for accounting records. Anything we no longer have a reason to hold gets deleted.</p>
+      <!-- DRAFT for Colin: Google Analytics retention.
+           TODO Colin: confirm the GA4 property's data retention setting (Admin, Data collection and modification, Data retention) is 14 months before this goes live. -->
+      <p>If you accept analytics, Google Analytics keeps the event data from your visits for 14 months and then deletes it. The _ga cookies on your device last up to two years, unless you delete them yourself or change your choice to Reject.</p>
     </section>
 
     <section class="blk"><h2><em>07</em>Your rights</h2>

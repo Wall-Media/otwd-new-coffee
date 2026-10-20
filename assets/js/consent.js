@@ -52,7 +52,25 @@ var OTWD_CONSENT_WORDING = {
     s.src = 'https://www.googletagmanager.com/gtag/js?id=' + MEASUREMENT_ID;
     document.head.appendChild(s);
     gtag('js', new Date());
-    gtag('config', MEASUREMENT_ID);
+    gtag('config', MEASUREMENT_ID, pageFields());
+  }
+
+  /* No query string or hash ever goes to Google Analytics. thanks.html is reached from the
+     GoHighLevel booking redirect, whose query carries the visitor's name, email, phone and
+     appointment ids. page_referrer is left to GA unless it has a query or hash (one of this
+     site's own pages, or the booking widget), in which case it is cut back to origin and path
+     too. Every hit on the page passes these fields: the config page_view and any later event. */
+  function cleanUrl(u){ return u.origin + u.pathname; }
+  function pageFields(){
+    var f = { page_location: cleanUrl(location) };
+    var ref = document.referrer;
+    if (ref){
+      try {
+        var r = new URL(ref);
+        if (r.search || r.hash) f.page_referrer = cleanUrl(r);
+      } catch (e) {}
+    }
+    return f;
   }
 
   /* Remove _ga and _ga_* on this host and every parent domain (GA sets them on the
@@ -72,7 +90,7 @@ var OTWD_CONSENT_WORDING = {
 
   function stopAnalytics(){
     gtag('consent', 'update', { analytics_storage: 'denied' });
-    /* If gtag.js already loaded on this page, stop it sending anything more. */
+    /* If gtag.js already loaded on this page, stop it building or sending anything more. */
     window['ga-disable-' + MEASUREMENT_ID] = true;
     clearGaCookies();
   }
@@ -140,10 +158,23 @@ var OTWD_CONSENT_WORDING = {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready);
   else ready();
 
+  /* A choice made in another tab applies here too. The storage event fires only in the other
+     tabs, never the one that wrote the value. A null key means storage was cleared, which
+     leaves no consent, so analytics stops if it was running. */
+  window.addEventListener('storage', function(e){
+    if (e.key !== STORE_KEY && e.key !== null) return;
+    var c = readChoice();
+    if (c === 'granted') startAnalytics();
+    else if (c === 'denied' || loaded) stopAnalytics();
+    if (c === 'granted' || c === 'denied') closeBanner();
+  });
+
   window.otwdConsent = {
     lead: function(formName){
       if (!granted() || !loaded) return false;
-      gtag('event', 'generate_lead', { form_name: formName });
+      var params = pageFields();
+      params.form_name = formName;
+      gtag('event', 'generate_lead', params);
       return true;
     }
   };
