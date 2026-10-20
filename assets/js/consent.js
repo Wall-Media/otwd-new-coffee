@@ -6,8 +6,9 @@
    visitor accepts, now or in an earlier visit. With no choice, or a rejection, nothing is
    loaded from googletagmanager.com or google-analytics.com.
 
-   The choice is kept in localStorage under STORE_KEY as "granted" or "denied". Any element
-   with data-cookie-settings (the "Cookie settings" footer link) reopens the banner.
+   The choice is kept in localStorage under STORE_KEY as "granted" or "denied", and in memory
+   for this page in case storage is unavailable. Any element with data-cookie-settings (the
+   "Cookie settings" footer link) reopens the banner.
 
    Pages report a lead with window.otwdConsent.lead('form_name'). It only sends when consent
    is granted, and returns true if it did. */
@@ -33,14 +34,27 @@ var OTWD_CONSENT_WORDING = {
   var loaded = false;
   var banner = null;
   var opener = null;
+  var memChoice = null;
 
   function readChoice(){
-    try { return window.localStorage.getItem(STORE_KEY); } catch (e) { return null; }
+    try { return window.localStorage.getItem(STORE_KEY); } catch (e) { return memChoice; }
   }
   function saveChoice(v){
+    memChoice = v;
     try { window.localStorage.setItem(STORE_KEY, v); } catch (e) {}
   }
-  function granted(){ return readChoice() === 'granted'; }
+  function storageWorks(){
+    try {
+      window.localStorage.setItem(STORE_KEY + '_probe', '1');
+      window.localStorage.removeItem(STORE_KEY + '_probe');
+      return true;
+    } catch (e) { return false; }
+  }
+  /* Granted needs this page's choice to be granted. When storage works it must still say
+     granted too, as another tab may have cleared it or rejected. */
+  function granted(){
+    return memChoice === 'granted' && (!storageWorks() || readChoice() === 'granted');
+  }
 
   function startAnalytics(){
     window['ga-disable-' + MEASUREMENT_ID] = false;
@@ -52,7 +66,8 @@ var OTWD_CONSENT_WORDING = {
     s.src = 'https://www.googletagmanager.com/gtag/js?id=' + MEASUREMENT_ID;
     /* The choice may have gone (another tab cleared storage or rejected) while gtag.js was
        still loading. The queued config runs as soon as it arrives, so stop the tag and clear
-       its cookies now, then again once that queued config has been processed. */
+       its cookies now. The deferred clear is a best effort second pass for any cookies the
+       queued config may write just after load, not a guarantee. */
     s.onload = function(){
       if (granted()) return;
       stopAnalytics();
@@ -149,6 +164,7 @@ var OTWD_CONSENT_WORDING = {
     opener = null;
   }
 
+  memChoice = readChoice();
   if (granted()) startAnalytics();
 
   function ready(){
@@ -172,7 +188,7 @@ var OTWD_CONSENT_WORDING = {
      it was running, but nothing is stored, so the banner asks again on the next page. */
   window.addEventListener('storage', function(e){
     if (e.key !== STORE_KEY && e.key !== null) return;
-    var c = readChoice();
+    var c = memChoice = readChoice();
     if (c === 'granted') startAnalytics();
     else if (c === 'denied' || loaded) stopAnalytics();
     if (c === 'granted' || c === 'denied') closeBanner();
