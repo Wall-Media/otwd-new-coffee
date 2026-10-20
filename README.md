@@ -91,8 +91,8 @@ pre-filled with everything they typed, so an enquiry is never lost silently. Set
 - **Petro's former employers are never named**; her background stays generalised.
 - **Email addresses never appear in the source.** The address is assembled in JavaScript
   at runtime in `index.html` only, and used as the fallback when the enquiry form cannot
-  send. Other pages link to `./#enquiry` rather than carry their own copy. There is no
-  phone number on the site.
+  send. Other pages link to `./#enquiry` rather than carry their own copy. The phone number
+  appears only as part of the trading address, in `partials/address.html` (see SITE.md).
 - **Cream palette only, never dark, and no light/dark toggle.** Tokens live in `assets/css/site.css`.
 - **SVG line art, never emoji.**
 - Calls to action are coffee invitations that warm up down the page: "Fancy a coffee?",
@@ -112,7 +112,7 @@ Keep new images around 1600px wide at most and compressed, since there is no bui
 
 ## Build script
 
-The shared parts of every page (fonts, tab icon, logo mark, headers, footers, legal line) and
+The shared parts of every page (fonts, tab icon, logo mark, headers, footers, legal line, trading address) and
 the whole Notes index (post cards, category and tag pages, `rss.xml`, `sitemap.xml`) are kept
 in step by `build.py`. Python 3, nothing to install. After any edit:
 

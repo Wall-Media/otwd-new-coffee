@@ -54,12 +54,20 @@ outside the markers is yours and is never touched. Partials can pull in other pa
 | `favicon` | the tab icon, every page |
 | `mark` | the logo mark, inside every header (size set per page) |
 | `legal` | the legal line, inside every footer |
+| `address` | the trading address and phone, inside every footer, plus index.html's contact section and coffee.html under the calendar |
 | `page-header`, `page-footer` | coffee.html, thanks.html, 404.html |
 | `notes-header`, `notes-footer` | every Notes page (`back_href` and `back_label` set per page) |
 | `post-card` | one card on a Notes listing |
 
 index.html and privacy.html keep their own headers and footers and use only `fonts`,
-`favicon`, `mark` and `legal`.
+`favicon`, `mark`, `legal` and `address`.
+
+**Every footer carries `legal` and `address`.** The build checks every page it writes (the
+pages in `PAGES`, every post, every category and tag page) for both, and stops naming any page
+that is missing one. `page-footer` and `notes-footer` include them with `{{> legal}}` and
+`{{> address}}`; index.html and privacy.html carry them as their own `<!-- block:legal -->` and
+`<!-- block:address -->` blocks. The list lives in `EVERY_PAGE` in build.py. A new page with its
+own footer needs both blocks, or the check fails.
 
 **Generated Notes files.** The build reads each post in `blog/` and writes, in full:
 
@@ -227,10 +235,32 @@ nothing where there is no italic text.
 
 ## Shared values, and everywhere they live
 
-**Phone number.** There isn't one. It was removed from every page on 4 September 2026
-(commit `798fff9`, "Drop the phone number"). Do not add one back unless Petro asks. If she
-does, it needs adding to the contact section in index.html and checking against the privacy
-notice, which mentions people ringing.
+**Trading address and phone number.** Removed from every page on 4 September 2026 (commit
+`798fff9`), and added back on 20 October 2026 as the trading address, written exactly as on the
+Google Business Profile:
+
+> Off The Wall Digital, 46 Vale Square, Ramsgate CT11 9DA, 07883 320855
+
+It lives once, in `partials/address.html`, inside an `<address>` element (`font-style:normal`,
+muted like the legal line), with the number as a `tel:+447883320855` link. The build puts it in:
+
+- every page's footer (see the blocks section above; the check enforces it)
+- index.html's contact section (`.contact__nap`, under the contact buttons)
+- coffee.html, under the calendar (in a `.calnote` div)
+
+The same details are repeated by hand in the JSON-LD on index.html (below). Change the address
+or number in the partial AND the JSON-LD, and keep both matching the Google Business Profile
+character for character, because search engines compare them.
+
+This is the trading address. The legal line's "Registered office" in Surrey is the company's
+registered address, and the two are meant to differ. Do not merge them or swap one for the other.
+
+**Structured data on index.html.** One `<script type="application/ld+json">` in the head
+describes the business as `LocalBusiness` and `ProfessionalService`: name, url, telephone
+(`+44 7883 320855`), the Ramsgate address and `sameAs` (the Facebook page). The Google Business
+Profile URL still has to be added to `sameAs` once confirmed; an HTML comment directly above
+the script says so, since JSON cannot hold comments. Notes posts have their own `BlogPosting`
+JSON-LD, which the build reads; this one it does not read.
 
 **Email address.** Never write `petro@wallmedia.co.uk` into the source. It is deliberately
 assembled in JavaScript at runtime so scrapers cannot read it, and that protection must
@@ -297,7 +327,8 @@ prefilled mailto, but changing it otherwise breaks enquiry delivery silently.
 
 **The email assembly JavaScript** in index.html. See above.
 
-**The legal footer text**, `partials/legal.html`.
+**The legal footer text**, `partials/legal.html`. The trading address is a separate partial,
+`partials/address.html`, so it can change without touching this.
 
 **`noindex,nofollow` on thanks.html.** It is the calendar's redirect target and must stay out
 of search.
@@ -345,8 +376,8 @@ is her shopfront.
 
 ## Change recipes
 
-**Add a phone number back.** Only if Petro asks. See Shared values above: it was removed on
-4 September 2026, so there is nothing to find and replace.
+**Change the trading address or phone number.** Edit `partials/address.html` and the JSON-LD
+in index.html's head, both to match the Google Business Profile exactly, then run the build.
 
 **Change a colour or spacing token.** One place: `assets/css/site.css`. Remember thanks.html
 and 404.html deliberately override `--maxw` and `--gutter`.
@@ -370,7 +401,8 @@ slash (`/coffee`, `/blog`), because Vercel redirects the other forms. Use
 **Add a booking CTA.** Copy an existing one. It is a plain link to the booking page, `/coffee`. Use coffee wording from the copy rules.
 
 **Add a page.** Copy 404.html as the template: it links site.css and page.css and uses the
-`fonts`, `favicon`, `page-header` and `page-footer` blocks. Add only what is unique to the new
+`fonts`, `favicon`, `page-header` and `page-footer` blocks (the footer brings the legal line
+and address, which the build requires on every page). Add only what is unique to the new
 page in its own `<style>`. Add the file to `PAGES` in build.py so its blocks are kept up to date,
 and to `STATIC_URLS` if it belongs in the sitemap. Run the build. Never copy index.html's header
 structure. Vercel serves a new .html file at its clean URL with no config change.
@@ -487,6 +519,8 @@ Recorded so they get fixed rather than rediscovered.
   make it optional or remove it in the calendar's form settings, then a test booking is rerun.
   The calendar also takes bookings more than a year ahead; Petro may want a booking window.
 - JSON-LD `dateModified` is set by hand.
+- **Google Business Profile URL missing from `sameAs`** in index.html's LocalBusiness JSON-LD.
+  Add it once the profile URL is confirmed, and remove the TODO comment above the script.
 - **No logo yet.** One will be designed as an SVG later. Until then the "crooked frame" mark
   stands in, and it is not a finished logo. It lives in `partials/mark.html` (the header mark,
   sized per page by its `size` attribute) and `partials/favicon.html` (a URL-encoded SVG data
