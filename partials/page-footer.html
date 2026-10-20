@@ -1,6 +1,9 @@
 <footer>
   <div class="foot__in">
-    <p class="foot__legal">&copy; <span id="yr">2026</span> {{> legal}}</p>
+    <div class="foot__legal" style="display:grid;gap:4px">
+      <p style="margin:0">&copy; <span id="yr">2026</span> {{> legal}}</p>
+      {{> address}}
+    </div>
     <div class="foot__links">
       <a href="/">Home</a>
       <span class="sep" aria-hidden="true">&middot;</span>

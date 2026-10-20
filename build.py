@@ -46,6 +46,10 @@ ATTR_RE = re.compile(r'([\w-]+)="([^"]*)"')
 PAGES = ['index.html', 'coffee.html', 'thanks.html', 'privacy.html', '404.html', 'blog/index.html']
 
 # Sitemap entries for pages that are not Notes: (path on disk, URL path, changefreq, priority)
+# Partials every page must carry in its footer, either through a footer partial or as its own
+# block. The build stops and names any page that is missing one.
+EVERY_PAGE = ['legal', 'address']
+
 STATIC_URLS = [
     ('index.html', '/', 'monthly', '1.0'),
     ('coffee.html', '/coffee', 'monthly', '0.9'),
@@ -375,6 +379,20 @@ def build_sitemap(ctx, pending):
 ''' % '\n'.join(urls)
 
 
+# ---------------------------------------------------------------- every page
+
+def check_every_page(outputs):
+    problems = []
+    for name in EVERY_PAGE:
+        want = render_partial(name, {})
+        for rel in sorted(outputs):
+            if rel.endswith('.html') and want not in outputs[rel]:
+                problems.append('%s has no %s. Add <!-- block:%s --><!-- /block:%s --> to its footer, '
+                                'or use a footer partial that includes {{> %s}}.' % (rel, name, name, name, name))
+    if problems:
+        raise BuildError('\n  '.join(['a page is missing a footer part:'] + problems))
+
+
 # ---------------------------------------------------------------- main
 
 def build(check=False):
@@ -413,6 +431,7 @@ def build(check=False):
         outputs['blog/tag/%s.html' % slug] = page_from_template('tag', {
             'slug': slug, 'name': esc(tags[slug])}, ctx, 'tag ' + slug)
     outputs['rss.xml'] = build_rss(ctx)
+    check_every_page(outputs)
 
     pending = set()
     for rel, text in outputs.items():
