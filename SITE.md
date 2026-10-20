@@ -51,6 +51,8 @@ outside the markers is yours and is never touched. Partials can pull in other pa
 | Partial | Used in |
 |---|---|
 | `fonts` | the Google Fonts links, every page |
+| `consent` | the Google consent defaults and `/assets/js/consent.js`, in every page's head |
+| `cookie-settings` | the "Cookie settings" link, in every footer |
 | `favicon` | the tab icon, every page |
 | `mark` | the logo mark, inside every header (size set per page) |
 | `legal` | the legal line, inside every footer |
@@ -309,10 +311,18 @@ attributes must not be touched or the artwork corrupts.
 **`[hidden]{display:none!important}`.** Declared in index.html, coffee.html, privacy.html and
 thanks.html. Do not add the `hidden` attribute to anything you intend to be visible.
 
-There is **no analytics, no tracking pixel and no cookie consent logic** on this site, and
-none should be added without Petro asking. Nothing uses localStorage or cookies. The privacy
-policy states that nothing is stored on the visitor's device, so adding tracking would make
-that page untrue.
+**Analytics and consent (added 20 October 2026).** Google Analytics 4 (`G-TJ3F734GY9`, gtag.js,
+no Tag Manager) runs only after the visitor accepts the cookie banner. Everything lives in
+`assets/js/consent.js`, loaded in every page's head by the `consent` block, which first sets
+every Google consent signal to denied. With no choice or a rejection, nothing is requested from
+Google at all. The choice is kept in localStorage (`otwd_analytics_consent`), and the "Cookie
+settings" link in every footer (`partials/cookie-settings.html`) reopens the banner. The
+banner's wording is the object at the top of consent.js, still a draft awaiting Colin's
+sign-off, as is the analytics wording in privacy.html section 02. Accept and Reject must stay
+equally prominent. A `generate_lead` event is sent only on a confirmed lead: `form_name`
+`enquiry` when the webhook answers 2xx, and `coffee_booking` when thanks.html loads (once per
+session). Add no other tracking, pixel or ads tag without Petro asking, and keep the privacy
+notice in step with whatever runs.
 
 ---
 
