@@ -30,3 +30,18 @@
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
+
+/* Cookie banner, built by /assets/js/consent.js. Non-modal; Accept and Reject share one class
+   on purpose so neither is more prominent. Sits under the home page modals (z-index 300). */
+.cc{position:fixed;left:clamp(12px,3vw,24px);right:clamp(12px,3vw,24px);bottom:clamp(12px,3vw,24px);z-index:250;
+  max-width:440px;padding:20px 22px;background:var(--bone);color:var(--ink);border:1px solid var(--pane-border);
+  border-radius:16px;box-shadow:var(--shadow-l);font-family:Karla,system-ui,sans-serif;font-size:.95rem;line-height:1.55}
+.cc .cc__title{margin:0 0 6px;font-family:Fraunces,Georgia,serif;font-size:1.15rem;font-weight:600;line-height:1.25;color:var(--head);font-variation-settings:"SOFT" 40,"WONK" 1}
+.cc .cc__title:focus{outline:none}
+.cc .cc__body{margin:0 0 16px}
+.cc .cc__body a{color:var(--teal-dark);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.cc .cc__actions{display:flex;gap:10px}
+.cc .cc__btn{flex:1 1 0;min-height:44px;padding:10px 16px;border:1.5px solid var(--ink);border-radius:999px;
+  background:var(--cream);color:var(--head);font:inherit;font-weight:700;cursor:pointer}
+.cc .cc__btn:hover{background:var(--sage)}
+.cc .cc__btn:focus-visible,.cc .cc__body a:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
