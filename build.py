@@ -413,6 +413,115 @@ def check_every_page(outputs):
         raise BuildError('\n  '.join(['a page is missing a footer part:'] + problems))
 
 
+def check_favicons(outputs):
+    """Check that favicon files exist with correct sizes and every page has favicon links."""
+    import struct
+    
+    problems = []
+    
+    # Required favicon files and their expected sizes
+    required_files = {
+        'favicon.ico': None,  # ICO validated separately
+        'favicon-16.png': (16, 16),
+        'favicon-32.png': (32, 32),
+        'favicon-48.png': (48, 48),
+        'favicon-96.png': (96, 96),
+        'favicon-192.png': (192, 192),
+        'apple-touch-icon.png': (180, 180),
+    }
+    
+    # Check each PNG file has correct signature and dimensions
+    for filename, expected_size in required_files.items():
+        filepath = os.path.join(ROOT, filename)
+        if not os.path.exists(filepath):
+            problems.append(f'{filename} is missing. Run python3 generate_favicons.py to create it.')
+        elif expected_size and filename.endswith('.png'):
+            try:
+                with open(filepath, 'rb') as f:
+                    # Check PNG signature: 89 50 4E 47 0D 0A 1A 0A
+                    sig = f.read(8)
+                    if sig != b'\x89PNG\r\n\x1a\n':
+                        problems.append(f'{filename} is not a valid PNG (bad signature)')
+                        continue
+                    # Read IHDR chunk (next 4 bytes are length, then 'IHDR', then width/height)
+                    length_bytes = f.read(4)
+                    chunk_type = f.read(4)
+                    if chunk_type != b'IHDR':
+                        problems.append(f'{filename} has invalid PNG structure (no IHDR)')
+                        continue
+                    # Read width and height (both 4-byte big-endian integers)
+                    width = struct.unpack('>I', f.read(4))[0]
+                    height = struct.unpack('>I', f.read(4))[0]
+                    if (width, height) != expected_size:
+                        problems.append(f'{filename} is {width}x{height}, expected {expected_size[0]}x{expected_size[1]}')
+            except Exception as e:
+                problems.append(f'{filename} cannot be read: {e}')
+    
+    # Validate favicon.ico
+    ico_path = os.path.join(ROOT, 'favicon.ico')
+    if os.path.exists(ico_path):
+        try:
+            with open(ico_path, 'rb') as f:
+                # Check ICO header: 00 00 01 00
+                header = f.read(4)
+                if header[:2] != b'\x00\x00':
+                    problems.append('favicon.ico has invalid reserved field')
+                if header[2:4] != b'\x01\x00':
+                    problems.append('favicon.ico has invalid type field (must be 1 for ICO)')
+                # Read count of images
+                count_bytes = f.read(2)
+                count = struct.unpack('<H', count_bytes)[0]
+                # Read directory entries to find embedded sizes
+                sizes_found = []
+                for i in range(count):
+                    entry = f.read(16)
+                    width = entry[0] if entry[0] != 0 else 256
+                    height = entry[1] if entry[1] != 0 else 256
+                    sizes_found.append((width, height))
+                # Check that 16x16, 32x32, and 48x48 are all present
+                required_ico_sizes = [(16, 16), (32, 32), (48, 48)]
+                for req_size in required_ico_sizes:
+                    if req_size not in sizes_found:
+                        problems.append(f'favicon.ico is missing {req_size[0]}x{req_size[1]} entry. Found: {", ".join(f"{w}x{h}" for w, h in sizes_found)}')
+        except Exception as e:
+            problems.append(f'favicon.ico cannot be validated: {e}')
+    
+    # Check that partials/favicon.html has all expected links
+    favicon_partial_path = os.path.join(ROOT, 'partials', 'favicon.html')
+    if os.path.exists(favicon_partial_path):
+        with open(favicon_partial_path, 'r', encoding='utf-8') as f:
+            favicon_html = f.read()
+        expected_links = [
+            '/favicon.ico',
+            '/favicon-16.png',
+            '/favicon-32.png',
+            '/favicon-48.png',
+            '/favicon-96.png',
+            '/favicon-192.png',
+            '/apple-touch-icon.png',
+        ]
+        for link in expected_links:
+            if link not in favicon_html:
+                problems.append(f'partials/favicon.html is missing link to {link}')
+    else:
+        problems.append('partials/favicon.html is missing')
+    
+    # Check every HTML page has favicon links
+    favicon_partial = render_partial('favicon', {})
+    for rel in sorted(outputs):
+        if rel.endswith('.html'):
+            html = outputs[rel]
+            if 'favicon' not in html:
+                problems.append(f'{rel} has no favicon links. Add <!-- block:favicon --><!-- /block:favicon --> to its head.')
+            elif favicon_partial not in html:
+                # Has some favicon reference but not the complete partial
+                if 'favicon.ico' not in html or 'apple-touch-icon' not in html:
+                    problems.append(f'{rel} has incomplete favicon links. Use {{{{ > favicon }}}} in its head.')
+    
+    if problems:
+        raise BuildError('\n  '.join(['favicon check failed:'] + problems))
+
+
 # ---------------------------------------------------------------- main
 
 def build(check=False):
@@ -452,6 +561,7 @@ def build(check=False):
             'slug': slug, 'name': esc(tags[slug])}, ctx, 'tag ' + slug)
     outputs['rss.xml'] = build_rss(ctx)
     check_every_page(outputs)
+    check_favicons(outputs)
 
     pending = set()
     for rel, text in outputs.items():

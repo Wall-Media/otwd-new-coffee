@@ -434,8 +434,10 @@ page in its own `<style>`. Add the file to `PAGES` in build.py so its blocks are
 and to `STATIC_URLS` if it belongs in the sitemap. Run the build. Never copy index.html's header
 structure. Vercel serves a new .html file at its clean URL with no config change.
 
-**Change a header, footer, the legal line, the fonts or the tab icon.** Edit the partial in
-`partials/`, run `python3 build.py`, commit everything it changed.
+**Change a header, footer, the legal line, the fonts or favicons.** Edit the partial in
+`partials/`, run `python3 build.py`, commit everything it changed. To change the favicon icon
+itself, replace `assets/brand/favicon-source.svg`, run `python3 generate_favicons.py`, then
+rebuild.
 
 **Add a note (blog post).**
 
@@ -550,10 +552,13 @@ Recorded so they get fixed rather than rediscovered.
   (https://www.google.com/maps?cid=15528237416962479881), alongside Facebook.
 - **No logo yet.** One will be designed as an SVG later. Until then the "crooked frame" mark
   stands in, and it is not a finished logo. It lives in `partials/mark.html` (the header mark,
-  sized per page by its `size` attribute) and `partials/favicon.html` (a URL-encoded SVG data
-  URI). When the logo arrives, save it as `assets/img/logo.svg`, put its markup in mark.html,
-  point favicon.html at `/assets/img/logo.svg`, add an Apple touch icon (a 180px PNG) there too,
-  and run the build.
+  sized per page by its `size` attribute).
+- **Favicons** are generated from `assets/brand/favicon-source.svg` by `generate_favicons.py`,
+  which creates favicon.ico (multi-size 16, 32, 48), PNG icons at 48, 96 and 192px, and a 180px
+  apple-touch-icon.png. All pages include these via `partials/favicon.html`. To swap the icon
+  when a new logo arrives, replace favicon-source.svg and run `python3 generate_favicons.py`,
+  then rebuild. The build checks every page has favicon links and every icon file exists with
+  correct dimensions.
 
 Fixed on 29 September 2026: the external images now live in the repo, the email assembly
 exists in one file only, robots.txt and a branded 404.html exist, every page has a social share
