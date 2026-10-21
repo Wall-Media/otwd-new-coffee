@@ -19,6 +19,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Karla:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 <!-- /block:fonts -->
 <!-- block:favicon --><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2036%2036%27%3E%3Ccircle%20cx%3D%2718%27%20cy%3D%274%27%20r%3D%271.4%27%20fill%3D%27%232a2e21%27%2F%3E%3Cline%20x1%3D%2718%27%20y1%3D%275.2%27%20x2%3D%2710%27%20y2%3D%2712%27%20stroke%3D%27%232a2e21%27%20stroke-width%3D%271.5%27%2F%3E%3Cline%20x1%3D%2718%27%20y1%3D%275.2%27%20x2%3D%2726%27%20y2%3D%2712%27%20stroke%3D%27%232a2e21%27%20stroke-width%3D%271.5%27%2F%3E%3Cg%20transform%3D%27rotate%28-9%2018%2021%29%27%3E%3Crect%20x%3D%277%27%20y%3D%2711%27%20width%3D%2722%27%20height%3D%2720%27%20rx%3D%272%27%20fill%3D%27%23ffffff%27%20stroke%3D%27%232a2e21%27%20stroke-width%3D%272.2%27%2F%3E%3Crect%20x%3D%2710.5%27%20y%3D%2714.5%27%20width%3D%2715%27%20height%3D%2713%27%20fill%3D%27%232ea89a%27%2F%3E%3Ccircle%20cx%3D%2723.5%27%20cy%3D%2725.5%27%20r%3D%271.6%27%20fill%3D%27%23e8547a%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"><!-- /block:favicon -->
+<!-- block:consent -->
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('consent','default',{ad_storage:'denied',analytics_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});
+</script>
+<script src="/assets/js/consent.js"></script>
+<!-- /block:consent -->
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/page.css">
 <style>
@@ -132,6 +139,8 @@ footer{border-top:1px solid rgba(47,51,39,.12);padding:30px 0 60px;margin-top:20
       <a href="/privacy#terms">Terms of use</a>
       <span class="sep" aria-hidden="true">&middot;</span>
       <a href="/#enquiry">Send a message</a>
+      <span class="sep" aria-hidden="true">&middot;</span>
+      <a href="/privacy#privacy" data-cookie-settings>Cookie settings</a>
     </div>
   </div>
 </footer>
@@ -141,6 +150,31 @@ footer{border-top:1px solid rgba(47,51,39,.12);padding:30px 0 60px;margin-top:20
 (function(){
   document.getElementById('yr').textContent = new Date().getFullYear();
 
+  /* GoHighLevel redirects here only after a booking is confirmed, so that visit is the lead.
+     It is told apart from a direct visit or a crawler, which bring neither, by either:
+     the redirect's query carrying one of GoHighLevel's booking or contact fields, or a
+     referrer from the booking widget (LeadConnector) or from /coffee, which has no link here.
+     Only the presence of a field is read; its value never leaves this page, and
+     otwdConsent.lead sends page_location without the query. Counted once per browser session
+     so a refresh does not count it twice. Sends nothing without analytics consent. */
+  var GHL_FIELDS = ['appointment_id', 'contact_id', 'calendar_id', 'email', 'phone',
+                    'first_name', 'last_name', 'full_name'];
+  function fromBooking(){
+    var q = new URLSearchParams(location.search);
+    for (var i = 0; i < GHL_FIELDS.length; i++){ if (q.get(GHL_FIELDS[i])) return true; }
+    try {
+      var r = new URL(document.referrer);
+      if (/(^|\.)(leadconnectorhq\.com|msgsndr\.com)$/.test(r.hostname)) return true;
+      if (r.origin === location.origin && /^\/coffee(\.html)?$/.test(r.pathname)) return true;
+    } catch (e) {}
+    return false;
+  }
+  var LEAD_KEY = 'otwd_lead_coffee_booking';
+  var counted = false;
+  try { counted = sessionStorage.getItem(LEAD_KEY) === '1'; } catch (e) {}
+  if (!counted && fromBooking() && window.otwdConsent && window.otwdConsent.lead('coffee_booking')){
+    try { sessionStorage.setItem(LEAD_KEY, '1'); } catch (e) {}
+  }
 })();
 </script>
 
