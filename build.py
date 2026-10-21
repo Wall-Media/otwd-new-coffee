@@ -413,6 +413,50 @@ def check_every_page(outputs):
         raise BuildError('\n  '.join(['a page is missing a footer part:'] + problems))
 
 
+def check_favicons(outputs):
+    """Check that favicon files exist with correct sizes and every page has favicon links."""
+    from PIL import Image
+    
+    problems = []
+    
+    # Required favicon files and their expected sizes
+    required_files = {
+        'favicon.ico': None,  # ICO can contain multiple sizes
+        'favicon-48.png': (48, 48),
+        'favicon-96.png': (96, 96),
+        'favicon-192.png': (192, 192),
+        'apple-touch-icon.png': (180, 180),
+    }
+    
+    # Check each favicon file exists and has correct dimensions
+    for filename, expected_size in required_files.items():
+        filepath = os.path.join(ROOT, filename)
+        if not os.path.exists(filepath):
+            problems.append(f'{filename} is missing. Run python3 generate_favicons.py to create it.')
+        elif expected_size and filename.endswith('.png'):
+            try:
+                img = Image.open(filepath)
+                if img.size != expected_size:
+                    problems.append(f'{filename} is {img.width}x{img.height}, expected {expected_size[0]}x{expected_size[1]}')
+            except Exception as e:
+                problems.append(f'{filename} cannot be read: {e}')
+    
+    # Check every HTML page has favicon links
+    favicon_partial = render_partial('favicon', {})
+    for rel in sorted(outputs):
+        if rel.endswith('.html'):
+            html = outputs[rel]
+            if 'favicon' not in html:
+                problems.append(f'{rel} has no favicon links. Add <!-- block:favicon --><!-- /block:favicon --> to its head.')
+            elif favicon_partial not in html:
+                # Has some favicon reference but not the complete partial
+                if 'favicon.ico' not in html or 'apple-touch-icon' not in html:
+                    problems.append(f'{rel} has incomplete favicon links. Use {{{{ > favicon }}}} in its head.')
+    
+    if problems:
+        raise BuildError('\n  '.join(['favicon check failed:'] + problems))
+
+
 # ---------------------------------------------------------------- main
 
 def build(check=False):
@@ -452,6 +496,7 @@ def build(check=False):
             'slug': slug, 'name': esc(tags[slug])}, ctx, 'tag ' + slug)
     outputs['rss.xml'] = build_rss(ctx)
     check_every_page(outputs)
+    check_favicons(outputs)
 
     pending = set()
     for rel, text in outputs.items():
