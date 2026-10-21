@@ -52,6 +52,10 @@ STATIC_URLS = [
     ('privacy.html', '/privacy', 'yearly', '0.3'),
 ]
 
+# Partials every page must carry in its footer, either through a footer partial or as its own
+# block. The build stops and names any page that is missing one.
+EVERY_PAGE = ['legal', 'address']
+
 
 class BuildError(Exception):
     pass
@@ -375,6 +379,40 @@ def build_sitemap(ctx, pending):
 ''' % '\n'.join(urls)
 
 
+# ---------------------------------------------------------------- every page
+
+def check_every_page(outputs):
+    problems = []
+    for name in EVERY_PAGE:
+        want = render_partial(name, {})
+        for rel in sorted(outputs):
+            if not rel.endswith('.html'):
+                continue
+            html = outputs[rel]
+            # 'address' must sit inside the page's <footer> element
+            if name == 'address':
+                footer_start = html.find('<footer')
+                if footer_start == -1:
+                    problems.append('%s has no <footer> element.' % rel)
+                    continue
+                footer_end = html.find('</footer>', footer_start)
+                if footer_end == -1:
+                    problems.append('%s has no closing </footer>.' % rel)
+                    continue
+                footer_content = html[footer_start:footer_end + 9]
+                if want not in footer_content:
+                    problems.append('%s has no %s inside its <footer>. Add <!-- block:%s --><!-- /block:%s --> '
+                                    'to the footer, or use a footer partial that includes {{> %s}}.' 
+                                    % (rel, name, name, name, name))
+            else:
+                # Other partials (like 'legal') can be anywhere in the page
+                if want not in html:
+                    problems.append('%s has no %s. Add <!-- block:%s --><!-- /block:%s --> to its footer, '
+                                    'or use a footer partial that includes {{> %s}}.' % (rel, name, name, name, name))
+    if problems:
+        raise BuildError('\n  '.join(['a page is missing a footer part:'] + problems))
+
+
 # ---------------------------------------------------------------- main
 
 def build(check=False):
@@ -413,6 +451,7 @@ def build(check=False):
         outputs['blog/tag/%s.html' % slug] = page_from_template('tag', {
             'slug': slug, 'name': esc(tags[slug])}, ctx, 'tag ' + slug)
     outputs['rss.xml'] = build_rss(ctx)
+    check_every_page(outputs)
 
     pending = set()
     for rel, text in outputs.items():
