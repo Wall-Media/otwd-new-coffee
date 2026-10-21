@@ -12,6 +12,7 @@ Generates:
 
 import os
 import sys
+import struct
 from pathlib import Path
 
 try:
@@ -31,26 +32,92 @@ PNG_SIZES = [16, 32, 48, 96, 192, 180]  # 180 is apple-touch-icon
 ICO_SIZES = [16, 32, 48]
 
 
-def generate_png(svg_path, output_path, size):
-    """Generate a PNG from SVG at the specified size."""
-    cairosvg.svg2png(
-        url=str(svg_path),
-        write_to=str(output_path),
-        output_width=size,
-        output_height=size
-    )
+def generate_png(svg_path, output_path, size, background=None):
+    """Generate a PNG from SVG at the specified size with optional background color."""
+    if background:
+        # Create PNG with background color
+        from io import BytesIO
+        # First render the SVG to PNG
+        png_bytes = cairosvg.svg2png(
+            url=str(svg_path),
+            output_width=size,
+            output_height=size
+        )
+        # Open it with PIL and add background
+        foreground = Image.open(BytesIO(png_bytes))
+        # Create background image
+        background_img = Image.new('RGB', (size, size), background)
+        # Paste foreground onto background (using alpha as mask if present)
+        if foreground.mode == 'RGBA':
+            background_img.paste(foreground, (0, 0), foreground)
+        else:
+            background_img.paste(foreground, (0, 0))
+        background_img.save(output_path)
+    else:
+        cairosvg.svg2png(
+            url=str(svg_path),
+            write_to=str(output_path),
+            output_width=size,
+            output_height=size
+        )
     print(f"Generated {output_path.name} ({size}x{size})")
 
 
-def generate_ico(png_paths, output_path):
-    """Generate a multi-size ICO from PNG files."""
-    images = [Image.open(p) for p in png_paths]
-    images[0].save(
-        output_path,
-        format='ICO',
-        sizes=[(img.width, img.height) for img in images]
-    )
-    print(f"Generated {output_path.name} (multi-size ICO)")
+def generate_ico(svg_path, output_path, sizes):
+    """Generate a multi-size ICO directly from SVG at the specified sizes."""
+    from io import BytesIO
+    images = []
+    
+    for size in sizes:
+        # Render SVG to PNG bytes at this size
+        png_bytes = cairosvg.svg2png(
+            url=str(svg_path),
+            output_width=size,
+            output_height=size
+        )
+        # Open as PIL Image and convert to RGBA
+        img = Image.open(BytesIO(png_bytes))
+        if img.mode != 'RGBA':
+            img = img.convert('RGBA')
+        images.append(img)
+    
+    # Write ICO file manually since Pillow's append_images doesn't always work correctly for ICO
+    with open(output_path, 'wb') as f:
+        # ICO header
+        f.write(b'\x00\x00')  # Reserved
+        f.write(b'\x01\x00')  # Type: 1 for ICO
+        f.write(struct.pack('<H', len(images)))  # Number of images
+        
+        # Calculate offsets for image data
+        offset = 6 + (16 * len(images))  # Header + directory entries
+        image_data = []
+        
+        # Write directory entries
+        for img in images:
+            # Save image as PNG to bytes
+            png_buffer = BytesIO()
+            img.save(png_buffer, format='PNG')
+            png_data = png_buffer.getvalue()
+            image_data.append(png_data)
+            
+            # Directory entry
+            width = img.width if img.width < 256 else 0
+            height = img.height if img.height < 256 else 0
+            f.write(struct.pack('B', width))  # Width
+            f.write(struct.pack('B', height))  # Height
+            f.write(b'\x00')  # Color palette (0 for PNG)
+            f.write(b'\x00')  # Reserved
+            f.write(b'\x01\x00')  # Color planes
+            f.write(b'\x20\x00')  # Bits per pixel (32 for RGBA)
+            f.write(struct.pack('<I', len(png_data)))  # Size of image data
+            f.write(struct.pack('<I', offset))  # Offset to image data
+            offset += len(png_data)
+        
+        # Write image data
+        for png_data in image_data:
+            f.write(png_data)
+    
+    print(f"Generated {output_path.name} (multi-size ICO with {', '.join(f'{size}x{size}' for size in sizes)})")
 
 
 def main():
@@ -62,20 +129,23 @@ def main():
 
     # Generate PNGs
     temp_pngs = {}
+    # Cream color from SITE.md: --cream:#fdf8ec
+    CREAM = '#fdf8ec'
+    
     for size in PNG_SIZES:
         if size == 180:
-            # Apple touch icon
+            # Apple touch icon with cream background
             output_path = OUTPUT_DIR / 'apple-touch-icon.png'
+            generate_png(SOURCE_SVG, output_path, size, background=CREAM)
         else:
             output_path = OUTPUT_DIR / f'favicon-{size}.png'
+            generate_png(SOURCE_SVG, output_path, size)
         
-        generate_png(SOURCE_SVG, output_path, size)
         temp_pngs[size] = output_path
 
-    # Generate multi-size ICO from the ICO_SIZES PNGs
-    ico_pngs = [temp_pngs[size] for size in ICO_SIZES]
+    # Generate multi-size ICO from the ICO_SIZES directly from SVG
     ico_path = OUTPUT_DIR / 'favicon.ico'
-    generate_ico(ico_pngs, ico_path)
+    generate_ico(SOURCE_SVG, ico_path, ICO_SIZES)
 
     print("\nAll favicons generated successfully!")
     print("\nGenerated files:")

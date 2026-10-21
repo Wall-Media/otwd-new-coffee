@@ -1,6 +1,8 @@
 # Source and tooling. Used to build and maintain the site, not part of it, so not published.
 build.py
+generate_favicons.py
 partials/
+assets/brand/
 blog/categories.json
 .githooks/
 .github/
